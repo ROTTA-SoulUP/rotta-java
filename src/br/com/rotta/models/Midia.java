@@ -80,4 +80,5 @@ public abstract class Midia {
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
     }
+
 }
