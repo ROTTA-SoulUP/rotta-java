@@ -4,17 +4,16 @@ import br.com.rotta.enums.StatusMidia;
 import br.com.rotta.models.Midia;
 
 
-// "extends Midia" = PostagemFoto herda tudo de Midia
+// PostagemFoto herda tudo de Midia
 public class PostagemFoto extends Midia {
 
-    // ── Atributos específicos de foto ──────────────────────
-    // Esses não existem em Midia — são exclusivos de PostagemFoto
+    // Atributos específicos de foto
     private String formato;  // JPG ou PNG
-    private int resolucao;   // em pixels, ex: 1080
+    private int resolucao;   // em pixels, por ex: 1080
 
-    // ── Construtor ─────────────────────────────────────────
+    // Construtor
     public PostagemFoto(int id, String urlArquivo, String descricao, int usuarioId, String formato, int resolucao) {
-        // super() chama o construtor de Midia primeiro
+
         // Inicializa: id, urlArquivo, descricao, usuarioId, dataEnvio, status
         super(id, urlArquivo, descricao, usuarioId);
 
@@ -23,11 +22,11 @@ public class PostagemFoto extends Midia {
         this.resolucao = resolucao;
     }
 
-    // ── Implementação dos métodos abstratos ────────────────
-    // O @Override diz: estou implementando o metodo abstrato da mãe
+    // Metodos Abstratos
+    // O @Override implementa o metodo abstrato da mãe
     @Override
     public void enviar() {
-        System.out.println("📸 Iniciando envio de foto...");
+        System.out.println(" Iniciando envio de foto...");
         System.out.println("Arquivo: " + getUrlArquivo());
         System.out.println("Formato: " + formato + " | Resolução: " + resolucao + "px");
         validarFormato();
@@ -43,7 +42,7 @@ public class PostagemFoto extends Midia {
         System.out.println("Envio da foto " + getId() + " cancelado.");
     }
 
-    // ── Métodos específicos de foto ────────────────────────
+    // Métodos específicos de foto
     public void validarFormato() {
         if (formato.equalsIgnoreCase("JPG") ||
                 formato.equalsIgnoreCase("PNG")) {
@@ -54,11 +53,11 @@ public class PostagemFoto extends Midia {
     }
 
     public void comprimirImagem() {
-        System.out.println("🗜️ Comprimindo imagem de " + resolucao +
+        System.out.println("Comprimindo imagem de " + resolucao +
                 "px para otimizar upload...");
     }
 
-    // ── Getters e Setters ──────────────────────────────────
+    // Getters e Setters
     public String getFormato() { return formato; }
     public int getResolucao() { return resolucao; }
     public void setFormato(String formato) { this.formato = formato; }
