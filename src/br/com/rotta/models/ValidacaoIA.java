@@ -1,7 +1,6 @@
 package br.com.rotta.models;
 
 import br.com.rotta.enums.ResultadoValidacao;
-
 import java.time.LocalDateTime;
 
 public class ValidacaoIA {

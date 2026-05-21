@@ -26,9 +26,9 @@ public class Usuario {
 
     public void cadastrar() {
         System.out.println("Usuário cadastrado!");
-        System.out.println("Nome: " + nome +
-                            "Email: " + email +
-                            "Data: " + dataCadastro);
+        System.out.println("\nNome: " + nome +
+                            "\nEmail: " + email +
+                            "\nData: " + dataCadastro.toLocalDate());
     }
 
     public void login() {

@@ -1,8 +1,6 @@
 package br.com.rotta.models;
 
 import br.com.rotta.enums.StatusMidia;
-import br.com.rotta.models.Midia;
-
 
 // PostagemFoto herda tudo de Midia
 public class PostagemFoto extends Midia {
