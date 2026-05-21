@@ -11,20 +11,24 @@ public abstract class Movimentacao {
     private String status;
     private int carteiraId;
 
+    // CONSTRUTOR
     public Movimentacao(int id, double valor, int carteiraId) {
+
         this.id = id;
         this.valor = valor;
         this.carteiraId = carteiraId;
         this.dataMovimentacao = LocalDateTime.now();
-        this.status = "PENDENTE"; // Começa pendente
+        this.status = "PENDENTE";
     }
 
-    // METODOS ABSTRATOS
+    // MÉTODOS ABSTRATOS
     public abstract void executar();
     public abstract void cancelar();
 
+
     public String consultarStatus() {
-        return "Você recebeu " + valor + " pontos! \nStatus: " + status;
+        return "Valor: " + valor +
+                "\nStatus: " + status;
     }
 
     protected void setStatus(String status) {
@@ -32,7 +36,6 @@ public abstract class Movimentacao {
     }
 
     // GETTERS E SETTERS
-
     public int getId() {
         return id;
     }
