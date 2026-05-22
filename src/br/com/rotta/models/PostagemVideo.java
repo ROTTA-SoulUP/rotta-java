@@ -38,10 +38,8 @@ public class PostagemVideo extends Midia {
         }
     }
 
-    public void extrairFrame() {
-        System.out.println("Extraindo frame para análise da IA...");
+    public void extrairFrame() {;
     }
-
 
     // GETTERS E SETTERS
     public int getDuracaoSegundos() {

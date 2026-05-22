@@ -57,40 +57,52 @@ public class Main {
                     System.out.print("Email: ");
                     String email = scanner.nextLine();
 
+                    System.out.print("Senha: ");
+                    String senha = scanner.nextLine();
+
                     System.out.print("CPF: ");
                     String cpf = scanner.nextLine();
 
                     System.out.print("Telefone: ");
                     String telefone = scanner.nextLine();
 
-                    Usuario novoUsuario = new Usuario(
+                    usuarioAtivo = new Usuario(
                             2,
                             nome,
                             email,
                             cpf,
-                            "senha123",
+                            senha,
                             telefone
                     );
 
-                    novoUsuario.cadastrar();
+                    usuarioAtivo.cadastrar();
 
-                    Carteira novaCarteira = new Carteira(
+                    carteiraAtiva = new Carteira(
                             2,
-                            novoUsuario.getId()
+                            usuarioAtivo.getId()
                     );
 
                     System.out.println("Carteira criada com sucesso.");
-                    System.out.println(novaCarteira.consultarSaldo());
+                    System.out.println(carteiraAtiva.consultarSaldo());
                 }
 
                 case 2 -> {
 
                     System.out.println("\n------ LOGIN ------");
 
-                    System.out.print("Digite o seu email: ");
-                    String email = scanner.nextLine();
+                    System.out.print("Digite o seu cpf: ");
+                    String cpf = scanner.nextLine();
 
-                    usuarioAtivo.login();
+                    System.out.println("Digite a sua senha: ");
+                    String senha = scanner.nextLine();
+
+                    if (cpf.equals(usuarioAtivo.getCpf()) && senha.equals(usuarioAtivo.getSenhaHash())) {
+
+                        usuarioAtivo.login();
+
+                    } else {
+                        System.out.println("CPF ou senha inválidos");
+                    }
                 }
 
                 case 3 -> {
