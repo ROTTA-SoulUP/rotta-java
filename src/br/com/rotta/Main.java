@@ -18,6 +18,7 @@ public class Main {
         );
 
         Carteira carteiraAtiva = new Carteira(1, usuarioAtivo.getId());
+        Midia midiaAtiva = null; // guarda a mídia postada
 
         System.out.println("BEM-VINDO AO ROTTA");
 
@@ -97,9 +98,7 @@ public class Main {
                     String senha = scanner.nextLine();
 
                     if (cpf.equals(usuarioAtivo.getCpf()) && senha.equals(usuarioAtivo.getSenhaHash())) {
-
                         usuarioAtivo.login();
-
                     } else {
                         System.out.println("CPF ou senha inválidos");
                     }
@@ -132,7 +131,7 @@ public class Main {
                     );
 
                     foto.enviar();
-
+                    midiaAtiva = foto;
                     System.out.println(foto.consultarStatus());
                 }
 
@@ -163,7 +162,7 @@ public class Main {
                     );
 
                     video.enviar();
-
+                    midiaAtiva = video;
                     System.out.println(video.consultarStatus());
                 }
 
@@ -171,37 +170,17 @@ public class Main {
 
                     System.out.println("\n------ VALIDAÇÃO DA IA ------");
 
-                    // Desafio simulado com pontos fixos
+                    if (midiaAtiva == null) {
+                        System.out.println("Nenhuma mídia postada. Envie uma foto ou vídeo primeiro.");
+                        break;
+                    }
+
                     int pontosDesafio = 50;
                     System.out.println("Desafio ativo: Selfie no transporte público");
                     System.out.println("Recompensa: " + pontosDesafio + " pontos");
 
-                    System.out.print("Tipo da mídia (1 - Foto | 2 - Vídeo): ");
-
-                    while (!scanner.hasNextInt()) {
-                        System.out.println("Digite apenas 1 ou 2.");
-                        scanner.next();
-                    }
-
-                    int tipo = scanner.nextInt();
-                    scanner.nextLine();
-
-                    Midia midia;
-
-                    if (tipo == 1) {
-                        midia = new PostagemFoto(
-                                1, "foto.jpg", "Foto sustentável",
-                                usuarioAtivo.getId(), "JPG", 1080
-                        );
-                    } else {
-                        midia = new PostagemVideo(
-                                2, "video.mp4", "Vídeo sustentável",
-                                usuarioAtivo.getId(), 20, "HD"
-                        );
-                    }
-
-                    ValidacaoIA validacao = new ValidacaoIA(1, midia.getId());
-                    validacao.analisarMidia(midia);
+                    ValidacaoIA validacao = new ValidacaoIA(1, midiaAtiva.getId());
+                    validacao.analisarMidia(midiaAtiva);
                     validacao.exibirResultado();
 
                     if (validacao.foiAprovado()) {
@@ -209,9 +188,9 @@ public class Main {
                         Pontuacao pontuacao = new Pontuacao(
                                 1,
                                 validacao.getScoreIA(),
-                                midia.getId(),
+                                midiaAtiva.getId(),
                                 carteiraAtiva.getId(),
-                                pontosDesafio  // pontos fixos do desafio
+                                pontosDesafio
                         );
 
                         pontuacao.executar();
@@ -230,31 +209,18 @@ public class Main {
 
                     System.out.println("\n----- CARTEIRA -----");
 
-                    System.out.println(
-                            "Usuário: " + usuarioAtivo.getNome()
-                    );
-
-                    System.out.println(
-                            carteiraAtiva.consultarSaldo()
-                    );
-
-                    System.out.println(
-                            "Última atualização: " +
-                                    carteiraAtiva.getUltimaAtualizacao()
-                    );
+                    System.out.println("Usuário: " + usuarioAtivo.getNome());
+                    System.out.println(carteiraAtiva.consultarSaldo());
+                    System.out.println("Última atualização: " + carteiraAtiva.getUltimaAtualizacao().toLocalDate());
                 }
 
                 case 7 -> {
 
                     System.out.println("\n------- RESGATE -------");
 
-                    System.out.println(
-                            carteiraAtiva.consultarSaldo()
-                    );
+                    System.out.println(carteiraAtiva.consultarSaldo());
 
-                    System.out.print(
-                            "Quantos pontos deseja utilizar?: "
-                    );
+                    System.out.print("Quantos pontos deseja utilizar?: ");
 
                     while (!scanner.hasNextDouble()) {
                         System.out.println("Digite apenas números.");
@@ -274,21 +240,16 @@ public class Main {
 
                         resgate.executar();
 
-                        resgate.validarVoucher();
-                        resgate.verificarExpiracao();
+                        if (resgate.getStatus().equals("CONCLUIDO")) {
+                            resgate.validarVoucher();
+                            resgate.verificarExpiracao();
+                            carteiraAtiva.debitarPontos(150);
+                        }
 
-                        System.out.println(
-                                resgate.consultarStatus()
-                        );
-
-                        carteiraAtiva.debitarPontos(pontos);
-
-                        System.out.println(
-                                carteiraAtiva.consultarSaldo()
-                        );
+                        System.out.println(resgate.consultarStatus());
+                        System.out.println(carteiraAtiva.consultarSaldo());
 
                     } else {
-
                         System.out.println("Saldo insuficiente.");
                     }
                 }

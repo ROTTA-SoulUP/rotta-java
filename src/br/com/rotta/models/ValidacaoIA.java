@@ -21,7 +21,11 @@ public class ValidacaoIA {
 
     // Analisa a mídia e gera o score
     public void analisarMidia(Midia midia) {
-        System.out.println("IA analisando:" + midia.getUrlArquivo());
+        if (midia instanceof PostagemFoto) {
+            System.out.println("IA analisando imagem: " + midia.getUrlArquivo());
+        } else if (midia instanceof PostagemVideo) {
+            System.out.println("IA analisando vídeo: " + midia.getUrlArquivo());
+        }
         System.out.println("Verificando autenticidade...");
 
         // Simula score da IA (0 a 100)
@@ -42,7 +46,7 @@ public class ValidacaoIA {
     }
 
     public void exibirResultado() {
-        System.out.println("Resultado da Validação: \n\nID: " + id + "\nMídia ID: " + midiaId + "\nScore: " + scoreIA + "\nStatus: " + statusValidacao + "\nData: " + dataAnalise);
+        System.out.println("\nResultado da Validação: \n\nID: " + id + "\nMídia ID: " + midiaId + "\nScore: " + scoreIA + "\nStatus: " + statusValidacao + "\nData: " + dataAnalise.toLocalDate());
     }
 
     // Retorna true se a postagem foi aprovada (total ou parcial)

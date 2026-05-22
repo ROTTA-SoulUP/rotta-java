@@ -8,7 +8,7 @@ public class Resgate extends Movimentacao {
     private double pontosUtilizados;
     private double valorCredito;
     private int diasRestantes;
-    private String codigoVoucher;
+    private String idTransacao;
 
     // CONSTRUTOR
     public Resgate(int id, double pontosUtilizados, int carteiraId) {
@@ -27,14 +27,24 @@ public class Resgate extends Movimentacao {
     // MÉTODOS OBRIGATÓRIOS
     @Override
     public void executar() {
+        if (pontosUtilizados < 150) {
+            setStatus("PENDENTE");
+            System.out.println("Pontos insuficientes para resgate do voucher.");
+            System.out.println("Você tem " + pontosUtilizados + " pontos. Mínimo: 150.");
+            return;
+        }
+
         gerarVoucher();
         setStatus("CONCLUIDO");
 
+        double pontosRestantes = pontosUtilizados - 150;
+
         System.out.println("Resgate realizado!");
-        System.out.println("Voucher: " + codigoVoucher +
-                        "\nCrédito: R$ " + valorCredito +
-                        "\nDias restantes: " + diasRestantes
-        );
+        System.out.println("Voucher: " + idTransacao +
+                "\nPontos utilizados: 150" +
+                "\nPontos restantes: " + pontosRestantes +
+                "\nVálido por " + diasRestantes + " dias." +
+                "\n[QR Code gerado para o voucher " + idTransacao + "]");
     }
 
     @Override
@@ -49,8 +59,8 @@ public class Resgate extends Movimentacao {
         Random random = new Random();
 
         int numero = random.nextInt(1000);
-        codigoVoucher = "ROTTA-" + numero;
-        System.out.println("Voucher gerado: " + codigoVoucher);
+        idTransacao = "ROTTA-" + numero;
+        System.out.println("Voucher gerado: " + idTransacao);
     }
 
     public void validarVoucher() {
@@ -81,7 +91,7 @@ public class Resgate extends Movimentacao {
     }
 
     public String getCodigoVoucher() {
-        return codigoVoucher;
+        return idTransacao;
     }
 
     public void setPontosUtilizados(double pontosUtilizados) {
@@ -97,6 +107,6 @@ public class Resgate extends Movimentacao {
     }
 
     public void setCodigoVoucher(String codigoVoucher) {
-        this.codigoVoucher = codigoVoucher;
+        this.idTransacao = codigoVoucher;
     }
 }
