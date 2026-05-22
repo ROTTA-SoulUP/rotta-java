@@ -27,7 +27,7 @@ public class PostagemVideo extends Midia {
     @Override
     public void cancelar() {
         setStatus(StatusMidia.CANCELADO);
-        System.out.println("Enviado do vídeo " + getId() + "cancelado.");
+        System.out.println("Enviado do vídeo " + getId() + " cancelado.");
     }
 
     public void validarDuracao() {

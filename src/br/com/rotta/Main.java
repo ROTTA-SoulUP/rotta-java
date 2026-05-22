@@ -159,6 +159,11 @@ public class Main {
 
                     System.out.println("\n------ VALIDAÇÃO DA IA ------");
 
+                    // Desafio simulado com pontos fixos
+                    int pontosDesafio = 50;
+                    System.out.println("Desafio ativo: Selfie no transporte público");
+                    System.out.println("Recompensa: " + pontosDesafio + " pontos");
+
                     System.out.print("Tipo da mídia (1 - Foto | 2 - Vídeo): ");
 
                     while (!scanner.hasNextInt()) {
@@ -172,33 +177,18 @@ public class Main {
                     Midia midia;
 
                     if (tipo == 1) {
-
                         midia = new PostagemFoto(
-                                1,
-                                "foto.jpg",
-                                "Foto sustentável",
-                                usuarioAtivo.getId(),
-                                "JPG",
-                                1080
+                                1, "foto.jpg", "Foto sustentável",
+                                usuarioAtivo.getId(), "JPG", 1080
                         );
-
                     } else {
-
                         midia = new PostagemVideo(
-                                2,
-                                "video.mp4",
-                                "Vídeo sustentável",
-                                usuarioAtivo.getId(),
-                                20,
-                                "HD"
+                                2, "video.mp4", "Vídeo sustentável",
+                                usuarioAtivo.getId(), 20, "HD"
                         );
                     }
 
-                    ValidacaoIA validacao = new ValidacaoIA(
-                            1,
-                            midia.getId()
-                    );
-
+                    ValidacaoIA validacao = new ValidacaoIA(1, midia.getId());
                     validacao.analisarMidia(midia);
                     validacao.exibirResultado();
 
@@ -208,17 +198,17 @@ public class Main {
                                 1,
                                 validacao.getScoreIA(),
                                 midia.getId(),
-                                carteiraAtiva.getId()
+                                carteiraAtiva.getId(),
+                                pontosDesafio  // pontos fixos do desafio
                         );
 
                         pontuacao.executar();
                         pontuacao.calcularPontos();
-
                         System.out.println(pontuacao.consultarStatus());
+                        carteiraAtiva.creditarPontos(pontuacao.getPontosAtribuidos());
 
-                        carteiraAtiva.creditarPontos(
-                                pontuacao.getPontosAtribuidos()
-                        );
+                    } else {
+                        System.out.println("Postagem rejeitada. Nenhum ponto creditado.");
                     }
 
                     System.out.println(carteiraAtiva.consultarSaldo());

@@ -8,36 +8,33 @@ public class Pontuacao extends Movimentacao {
     private String resultado;
     private int midiaId;
 
-    public Pontuacao(int id, int scoreIA, int midiaId, int carteiraId) {
-        super(id, calcularValor(scoreIA), carteiraId);
+    // Construtor recebe pontosDoDesafio
+    public Pontuacao(int id, int scoreIA, int midiaId,
+                     int carteiraId, int pontosDoDesafio) {
+        super(id, pontosDoDesafio, carteiraId);
         this.scoreIA = scoreIA;
         this.midiaId = midiaId;
-        this.pontosAtribuidos = (int) calcularValor(scoreIA);
-        this.resultado = scoreIA >= 40 ? "APROVADO" : "REJEITADO";
-    }
-
-    // Metodo estático para calcular antes do super()
-    private static double calcularValor(int score) {
-        if (score >= 70) {
-            return score;
-        } else {
-            return 0;
-        }
+        // Pontos só são atribuídos se score >= 70
+        this.pontosAtribuidos = scoreIA >= 70 ? pontosDoDesafio : 0;
+        this.resultado = scoreIA >= 70 ? "APROVADO" : "REJEITADO";
     }
 
     @Override
-    public void executar(){
-        if (scoreIA >= 40) {
+    public void executar() {
+        if (scoreIA >= 70) {
             setStatus("CONCLUÍDO");
             System.out.println("Pontuação creditada: " + pontosAtribuidos + " pontos");
             System.out.println("Score IA: " + scoreIA + "\nResultado: " + resultado);
+        } else {
+            setStatus("REJEITADO");
+            System.out.println("Score " + scoreIA + " abaixo do mínimo. Sem pontos.");
         }
     }
 
     @Override
     public void cancelar() {
         setStatus("CANCELADO");
-        System.out.println("Pontuação " + getId() + "cancelada.");
+        System.out.println("Pontuação " + getId() + " cancelada.");
     }
 
     public void calcularPontos() {
@@ -46,35 +43,12 @@ public class Pontuacao extends Movimentacao {
     }
 
     // GETTERS E SETTERS
-    public int getScoreIA() {
-        return scoreIA;
-    }
-
-    public void setScoreIA(int scoreIA) {
-        this.scoreIA = scoreIA;
-    }
-
-    public int getPontosAtribuidos() {
-        return pontosAtribuidos;
-    }
-
-    public void setPontosAtribuidos(int pontosAtribuidos) {
-        this.pontosAtribuidos = pontosAtribuidos;
-    }
-
-    public String getResultado() {
-        return resultado;
-    }
-
-    public void setResultado(String resultado) {
-        this.resultado = resultado;
-    }
-
-    public int getMidiaId() {
-        return midiaId;
-    }
-
-    public void setMidiaId(int midiaId) {
-        this.midiaId = midiaId;
-    }
+    public int getScoreIA() { return scoreIA; }
+    public int getPontosAtribuidos() { return pontosAtribuidos; }
+    public String getResultado() { return resultado; }
+    public int getMidiaId() { return midiaId; }
+    public void setScoreIA(int scoreIA) { this.scoreIA = scoreIA; }
+    public void setPontosAtribuidos(int p) { this.pontosAtribuidos = p; }
+    public void setResultado(String resultado) { this.resultado = resultado; }
+    public void setMidiaId(int midiaId) { this.midiaId = midiaId; }
 }

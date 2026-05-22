@@ -47,7 +47,7 @@ public class Usuario {
 
     public void desativarConta() {
         this.ativo = false;
-        System.out.println("Conta de " + nome + "desativada.");
+        System.out.println("Conta de " + nome + " desativada.");
     }
 
     //GETTERS E SETTERS
