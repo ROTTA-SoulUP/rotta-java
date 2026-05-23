@@ -5,51 +5,67 @@ import java.time.LocalDateTime;
 
 public class ValidacaoIA {
 
-    //  ATRIBUTOS
     private int id;
     private int scoreIA;
-    private ResultadoValidacao statusValidacao; // enum
+    private ResultadoValidacao statusValidacao;
     private String observacao;
     private LocalDateTime dataAnalise;
     private int midiaId;
 
     public ValidacaoIA(int id, int midiaId) {
+
         this.id = id;
         this.midiaId = midiaId;
         this.dataAnalise = LocalDateTime.now();
     }
 
-    // Analisa a mídia e gera o score
     public void analisarMidia(Midia midia) {
+
         if (midia instanceof PostagemFoto) {
-            System.out.println("IA analisando imagem: " + midia.getUrlArquivo());
+
+            System.out.println("IA analisando imagem...");
+
         } else if (midia instanceof PostagemVideo) {
-            System.out.println("IA analisando vídeo: " + midia.getUrlArquivo());
+
+            System.out.println("IA analisando vídeo...");
         }
+
         System.out.println("Verificando autenticidade...");
 
-        // Simula score da IA (0 a 100)
         this.scoreIA = (int)(Math.random() * 100);
 
-        // Define resultado baseado no score
-        if (scoreIA >= 70) {
+        if (scoreIA >= 30) {
+
             this.statusValidacao = ResultadoValidacao.APROVADO;
-            this.observacao = "Seu post foi verificado e aceito com sucesso!";
+
+            this.observacao =
+                    "Seu post foi verificado e aceito com sucesso!";
+
         } else {
+
             this.statusValidacao = ResultadoValidacao.REJEITADO;
-            this.observacao = "Ops... seu post foi invalidado em nossa verificação.";
+
+            this.observacao =
+                    "Ops... seu post foi invalidado em nossa verificação.";
         }
 
         System.out.println("Score: " + scoreIA + "/100");
         System.out.println("Resultado: " + statusValidacao);
-        System.out.println("Observação: " + observacao);
     }
 
     public void exibirResultado() {
-        System.out.println("\nResultado da Validação: \n\nID: " + id + "\nMídia ID: " + midiaId + "\nScore: " + scoreIA + "\nStatus: " + statusValidacao + "\nData: " + dataAnalise.toLocalDate());
+
+        System.out.println("\nResultado da Validação:");
+
+        System.out.println("ID: " + id);
+
+        System.out.println("Mídia ID: " + midiaId);
+
+        System.out.println("Score: " + scoreIA);
+
+        System.out.println("Status: " + statusValidacao);
     }
 
-    // Retorna true se a postagem foi aprovada (total ou parcial)
     public boolean foiAprovado() {
         return statusValidacao == ResultadoValidacao.APROVADO;
     }

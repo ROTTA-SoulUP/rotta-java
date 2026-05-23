@@ -10,7 +10,7 @@ public abstract class Midia {
     private String urlArquivo;
     private String descricao;
     private final LocalDateTime dataEnvio;
-    private StatusMidia status; // Aqui chamamos o enum
+    private StatusMidia status;
     private int usuarioId;
 
     // CONSTRUTOR
@@ -19,15 +19,15 @@ public abstract class Midia {
         this.urlArquivo = urlArquivo;
         this.descricao = descricao;
         this.usuarioId = usuarioId;
-        this.dataEnvio = LocalDateTime.now(); // O sistema pega a data/hora atual
-        this.status = StatusMidia.PENDENTE; // Começa sempre pendente
+        this.dataEnvio = LocalDateTime.now();
+        this.status = StatusMidia.PENDENTE;
     }
 
     public abstract void enviar();
     public abstract void cancelar();
 
     public String consultarStatus() {
-        return "Mídia: " + this.id + "\nStatus: " + this.status;
+        return "Status da mídia: " + status;
     }
 
     protected void setStatus(StatusMidia status) {

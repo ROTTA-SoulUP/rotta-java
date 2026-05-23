@@ -5,22 +5,29 @@ import br.com.rotta.enums.StatusMidia;
 public class PostagemVideo extends Midia {
 
     private int duracaoSegundos;
-    private String qualidade; // Hd, 4k...
+    private String qualidade;
 
-    public PostagemVideo(int id, String urlArquivo, String descricao, int usuarioId, int duracaoSegundos, String qualidade) {
+    public PostagemVideo(int id, String urlArquivo,
+                         String descricao, int usuarioId,
+                         int duracaoSegundos, String qualidade) {
+
         super(id, urlArquivo, descricao, usuarioId);
+
         this.duracaoSegundos = duracaoSegundos;
         this.qualidade = qualidade;
     }
 
     @Override
     public void enviar() {
+
         System.out.println("Iniciando o envio de video...");
         System.out.println("Arquivo: " + getUrlArquivo());
-        System.out.println("Duração: " + duracaoSegundos + "s | Qualidade: " + qualidade);
+
         validarDuracao();
         extrairFrame();
+
         setStatus(StatusMidia.ENVIADO);
+
         System.out.println("Vídeo enviado com sucesso!");
     }
 
@@ -31,14 +38,19 @@ public class PostagemVideo extends Midia {
     }
 
     public void validarDuracao() {
-        if (duracaoSegundos <= 30) {
-            System.out.println("Duração de " + duracaoSegundos + "s válida.");
+
+        if (duracaoSegundos <= 60) {
+
+            System.out.println("Duração válida.");
+
         } else {
-            System.out.println("Vídeo longo. Máximo: 30 segundos.");
+
+            System.out.println("Vídeo acima do limite.");
         }
     }
 
-    public void extrairFrame() {;
+    public void extrairFrame() {
+        System.out.println("Frame extraído.");
     }
 
     // GETTERS E SETTERS

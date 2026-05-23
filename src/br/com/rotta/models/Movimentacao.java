@@ -25,10 +25,8 @@ public abstract class Movimentacao {
     public abstract void executar();
     public abstract void cancelar();
 
-
     public String consultarStatus() {
-        return "Valor: " + valor +
-                "\nStatus: " + status;
+        return "Status: " + status;
     }
 
     protected void setStatus(String status) {

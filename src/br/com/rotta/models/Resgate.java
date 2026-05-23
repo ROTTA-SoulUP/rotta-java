@@ -4,47 +4,39 @@ import java.util.Random;
 
 public class Resgate extends Movimentacao {
 
-    // ATRIBUTOS
     private double pontosUtilizados;
     private double valorCredito;
     private int diasRestantes;
-    private String idTransacao;
+    private String codigoQR;
 
-    // CONSTRUTOR
     public Resgate(int id, double pontosUtilizados, int carteiraId) {
 
         super(id, pontosUtilizados, carteiraId);
+
         this.pontosUtilizados = pontosUtilizados;
-
-        // CONVERSÃO:
-        // 100 pontos = R$ 1,00
-        this.valorCredito = pontosUtilizados * 0.01;
-
-        // Voucher válido por 7 dias
+        this.valorCredito = 5.30;
         this.diasRestantes = 7;
     }
 
-    // MÉTODOS OBRIGATÓRIOS
     @Override
     public void executar() {
+
         if (pontosUtilizados < 150) {
+
             setStatus("PENDENTE");
-            System.out.println("Pontos insuficientes para resgate do voucher.");
-            System.out.println("Você tem " + pontosUtilizados + " pontos. Mínimo: 150.");
+
+            System.out.println("Pontos insuficientes para resgate.");
+
+            System.out.println("Você precisa de 150 pontos.");
+
             return;
         }
 
-        gerarVoucher();
+        gerarQRCode();
+
         setStatus("CONCLUIDO");
 
-        double pontosRestantes = pontosUtilizados - 150;
-
         System.out.println("Resgate realizado!");
-        System.out.println("Voucher: " + idTransacao +
-                "\nPontos utilizados: 150" +
-                "\nPontos restantes: " + pontosRestantes +
-                "\nVálido por " + diasRestantes + " dias." +
-                "\n[QR Code gerado para o voucher " + idTransacao + "]");
     }
 
     @Override
@@ -53,28 +45,28 @@ public class Resgate extends Movimentacao {
         System.out.println("Resgate " + getId() + " cancelado.");
     }
 
-    // MÉTODOS ESPECÍFICOS
-    public void gerarVoucher() {
+    public void gerarQRCode() {
 
         Random random = new Random();
 
-        int numero = random.nextInt(1000);
-        idTransacao = "ROTTA-" + numero;
-        System.out.println("Voucher gerado: " + idTransacao);
+        int numero = random.nextInt(9000) + 1000;
+
+        codigoQR = "QR-ROTTA-" + numero;
+
+        System.out.println("QR Code gerado: " + codigoQR);
     }
 
-    public void validarVoucher() {
-
-        if (diasRestantes > 0) {
-            System.out.println("Voucher válido!");
-        } else {
-            System.out.println("Voucher expirado!");
-        }
+    public void validarQRCode() {
+        System.out.println("QR Code validado.");
     }
 
     public void verificarExpiracao() {
+        System.out.println("Validade confirmada.");
+    }
 
-        System.out.println("Dias restantes: " + diasRestantes);
+    @Override
+    public String consultarStatus() {
+        return "Status do resgate: " + getStatus();
     }
 
     // GETTERS E SETTERS
@@ -90,8 +82,8 @@ public class Resgate extends Movimentacao {
         return diasRestantes;
     }
 
-    public String getCodigoVoucher() {
-        return idTransacao;
+    public String getCodigoQR() {
+        return codigoQR;
     }
 
     public void setPontosUtilizados(double pontosUtilizados) {
@@ -106,7 +98,7 @@ public class Resgate extends Movimentacao {
         this.diasRestantes = diasRestantes;
     }
 
-    public void setCodigoVoucher(String codigoVoucher) {
-        this.idTransacao = codigoVoucher;
+    public void setCodigoQR(String codigoQR) {
+        this.codigoQR = codigoQR;
     }
 }
