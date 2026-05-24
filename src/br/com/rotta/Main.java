@@ -12,7 +12,7 @@ public class Main {
         Usuario usuarioAtivo = new Usuario(
                 1,
                 "Guilherme Almeida",
-                "guimmalmeidaads@gmail.com",
+                "guiAlmeida@gmail.com",
                 "11223344556",
                 "amoarotta123",
                 "11998765654"
