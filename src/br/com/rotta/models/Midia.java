@@ -40,14 +40,30 @@ public abstract class Midia {
     public String getUrlArquivo() {
         return urlArquivo;
     }
-    public String getDescricao() { return descricao; }
-    public LocalDateTime getDataEnvio() { return dataEnvio; }
-    public StatusMidia getStatus() { return status; }
-    public int getUsuarioId() { return usuarioId; }
+    public String getDescricao() {
+        return descricao;
+    }
+    public LocalDateTime getDataEnvio() {
+        return dataEnvio;
+    }
+    public StatusMidia getStatus() {
+        return status;
+    }
+    public int getUsuarioId() {
+        return usuarioId;
+    }
 
     // SETTERS
-    public void setId(int id) { this.id = id; }
-    public void setUrlArquivo(String urlArquivo) { this.urlArquivo = urlArquivo; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
-    public void setUsuarioId(int usuarioId) { this.usuarioId = usuarioId; }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setUrlArquivo(String urlArquivo) {
+        this.urlArquivo = urlArquivo;
+    }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 }

@@ -35,7 +35,7 @@ public class ValidacaoIA {
 
         System.out.println("Verificando autenticidade...");
 
-        this.scoreIA = (int)(Math.random() * 101);
+        this.scoreIA = (int)(Math.random() * 101); // Gera número aleatório para a simulação do scoreIA
 
         if (scoreIA >= 30) {
 

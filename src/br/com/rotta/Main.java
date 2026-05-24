@@ -20,7 +20,7 @@ public class Main {
 
         Carteira carteiraAtiva = new Carteira(1, usuarioAtivo.getId());
         Midia midiaAtiva = null;
-        int desafioEscolhido = -1;
+        int desafioEscolhido = -1; // Nenhum desafio é selecionado quando começa o código até o usuário selecionar
 
         // DESAFIOS DISPONIVEIS
         String[] titulosDesafios = {
@@ -60,7 +60,7 @@ public class Main {
 
             System.out.print("Escolha uma opção: ");
 
-            while (!scanner.hasNextInt()) {
+            while (!scanner.hasNextInt()) { // Verifica se o usuário colocou um número inteiro
                 System.out.println("Digite apenas números.");
                 scanner.next();
             }
@@ -113,7 +113,7 @@ public class Main {
                     String senha = scanner.nextLine();
 
                     if (cpf.equals(usuarioAtivo.getCpf()) &&
-                            senha.equals(usuarioAtivo.getSenhaHash())) {
+                            senha.equals(usuarioAtivo.getSenhaHash())) { // Confere se as informações são iguais
                         usuarioAtivo.login();
                     } else {
                         System.out.println("CPF ou senha inválidos.");
@@ -297,7 +297,7 @@ public class Main {
 
                     for (int i = 0; i < titulosDesafios.length; i++) {
                         System.out.println("[" + (i + 1) + "] " +
-                                titulosDesafios[i] + " → " +
+                                titulosDesafios[i] + " : " +
                                 pontosDesafios[i] + " pontos");
                     }
 

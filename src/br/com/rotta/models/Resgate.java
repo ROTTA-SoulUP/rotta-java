@@ -17,7 +17,7 @@ public class Resgate extends Movimentacao {
 
         this.pontosUtilizados = pontosUtilizados;
         this.valorCredito = 5.30;
-        this.diasRestantes = 7;
+        this.diasRestantes = 7; // Sempre que o usuário resgata ele tem determinados dias para utilizar o QR Code
     }
 
     // METODOS
@@ -46,7 +46,7 @@ public class Resgate extends Movimentacao {
 
         Random random = new Random();
 
-        int numero = random.nextInt(9000) + 1000;
+        int numero = random.nextInt(9000) + 1000; // Número alto para gerar várias opões de códigos
 
         codigoQR = "QR-ROTTA-" + numero;
 
