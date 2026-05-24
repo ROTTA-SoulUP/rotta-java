@@ -8,6 +8,14 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
+        /** Integrantes do grupo:
+         * Guilherme Almeida - RM571713
+         * Leonardo Arnaldo - RM573188
+         * Beatriz Urbano - RM569341
+         * Thiago Rodrigues - RM572616
+         * Geovanna Secchi - RM573452
+         */
+
         // DADOS INICIAIS
         Usuario usuarioAtivo = new Usuario(
                 1,
