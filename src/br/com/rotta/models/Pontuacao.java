@@ -7,7 +7,9 @@ public class Pontuacao extends Movimentacao {
     private int pontosAtribuidos;
     private String resultado;
     private int midiaId;
+    private int pontosDoDesafio;
 
+    // CONSTRUTOR
     public Pontuacao(int id, int scoreIA, int midiaId,
                      int carteiraId, int pontosDoDesafio) {
 
@@ -15,6 +17,7 @@ public class Pontuacao extends Movimentacao {
 
         this.scoreIA = scoreIA;
         this.midiaId = midiaId;
+        this.pontosDoDesafio = pontosDoDesafio;
 
         this.pontosAtribuidos =
                 scoreIA >= 30 ? pontosDoDesafio : 0;
@@ -23,6 +26,7 @@ public class Pontuacao extends Movimentacao {
                 scoreIA >= 30 ? "APROVADO" : "REJEITADO";
     }
 
+    // METODOS
     @Override
     public void executar() {
 
@@ -40,12 +44,6 @@ public class Pontuacao extends Movimentacao {
         }
     }
 
-    @Override
-    public void cancelar() {
-        setStatus("CANCELADO");
-        System.out.println("Pontuação " + getId() + " cancelada.");
-    }
-
     public void calcularPontos() {
         System.out.println("Pontuação processada.");
     }
@@ -55,6 +53,7 @@ public class Pontuacao extends Movimentacao {
     public int getPontosAtribuidos() { return pontosAtribuidos; }
     public String getResultado() { return resultado; }
     public int getMidiaId() { return midiaId; }
+    public int getPontosDoDesafio() { return pontosDoDesafio; }
 
     public void setScoreIA(int scoreIA) { this.scoreIA = scoreIA; }
 
@@ -68,5 +67,9 @@ public class Pontuacao extends Movimentacao {
 
     public void setMidiaId(int midiaId) {
         this.midiaId = midiaId;
+    }
+
+    public void setPontosDoDesafio(int pontosDoDesafio) {
+        this.pontosDoDesafio = pontosDoDesafio;
     }
 }

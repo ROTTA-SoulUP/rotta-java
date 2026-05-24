@@ -10,6 +10,7 @@ public class Carteira {
     private LocalDateTime ultimaAtualizacao;
     private int usuarioId;
 
+    // CONSTRUTOR
     public Carteira(int id, int usuarioId) {
         this.id = id;
         this.usuarioId = usuarioId;
@@ -18,7 +19,6 @@ public class Carteira {
     }
 
     // METODOS
-    // Adiciona pontos ao saldo
     public void creditarPontos(double pontos) {
         this.saldoPontos += pontos;
         this.ultimaAtualizacao = LocalDateTime.now();
@@ -26,7 +26,6 @@ public class Carteira {
         System.out.println("Saldo Atual: " + saldoPontos + " pontos.");
     }
 
-    // Remove pontos do saldo
     public void debitarPontos(double pontos) {
         if (verificarLimite(pontos)) {
             this.saldoPontos -= pontos;

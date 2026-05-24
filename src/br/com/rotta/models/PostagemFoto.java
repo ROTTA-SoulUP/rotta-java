@@ -4,8 +4,10 @@ import br.com.rotta.enums.StatusMidia;
 
 public class PostagemFoto extends Midia {
 
+    // ATRIBUTOS
     private String localizacao;
 
+    // CONSTRUTOR
     public PostagemFoto(int id, String urlArquivo,
                         String descricao, int usuarioId,
                         String localizacao) {
@@ -15,6 +17,7 @@ public class PostagemFoto extends Midia {
         this.localizacao = localizacao;
     }
 
+    // METODOS
     @Override
     public void enviar() {
 
@@ -29,12 +32,6 @@ public class PostagemFoto extends Midia {
         System.out.println("Foto enviada com sucesso!");
     }
 
-    @Override
-    public void cancelar() {
-        setStatus(StatusMidia.CANCELADO);
-        System.out.println("Envio da foto " + getId() + " cancelado.");
-    }
-
     public void validarFoto() {
         System.out.println("Formato detectado automaticamente pelo sistema.");
     }
@@ -43,6 +40,7 @@ public class PostagemFoto extends Midia {
         System.out.println("Imagem otimizada.");
     }
 
+    // GETTERS E SETTERS
     public String getLocalizacao() {
         return localizacao;
     }

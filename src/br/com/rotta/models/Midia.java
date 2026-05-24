@@ -23,9 +23,8 @@ public abstract class Midia {
         this.status = StatusMidia.PENDENTE;
     }
 
+    // METODOS
     public abstract void enviar();
-    public abstract void cancelar();
-
     public String consultarStatus() {
         return "Status da mídia: " + status;
     }
@@ -34,15 +33,19 @@ public abstract class Midia {
         this.status = status;
     }
 
-    // Getters
-    public int getId() { return id; }
-    public String getUrlArquivo() { return urlArquivo; }
+    // GETTERS
+    public int getId() {
+        return id;
+    }
+    public String getUrlArquivo() {
+        return urlArquivo;
+    }
     public String getDescricao() { return descricao; }
     public LocalDateTime getDataEnvio() { return dataEnvio; }
     public StatusMidia getStatus() { return status; }
     public int getUsuarioId() { return usuarioId; }
 
-    // Setters
+    // SETTERS
     public void setId(int id) { this.id = id; }
     public void setUrlArquivo(String urlArquivo) { this.urlArquivo = urlArquivo; }
     public void setDescricao(String descricao) { this.descricao = descricao; }

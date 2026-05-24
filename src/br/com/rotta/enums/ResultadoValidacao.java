@@ -2,6 +2,7 @@ package br.com.rotta.enums;
 
 public enum ResultadoValidacao {
 
-    APROVADO, // Score >= 70
-    REJEITADO // Score < 40
+    // RESULTADOS DA VALIDACAO
+    APROVADO, // Score suficiente para aprovar a validacao
+    REJEITADO // Score insuficiente para aprovar a validacao
 }

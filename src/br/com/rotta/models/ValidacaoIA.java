@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class ValidacaoIA {
 
+    // ATRIBUTOS
     private int id;
     private int scoreIA;
     private ResultadoValidacao statusValidacao;
@@ -12,6 +13,7 @@ public class ValidacaoIA {
     private LocalDateTime dataAnalise;
     private int midiaId;
 
+    // CONSTRUTOR
     public ValidacaoIA(int id, int midiaId) {
 
         this.id = id;
@@ -19,6 +21,7 @@ public class ValidacaoIA {
         this.dataAnalise = LocalDateTime.now();
     }
 
+    // METODOS
     public void analisarMidia(Midia midia) {
 
         if (midia instanceof PostagemFoto) {
@@ -32,7 +35,7 @@ public class ValidacaoIA {
 
         System.out.println("Verificando autenticidade...");
 
-        this.scoreIA = (int)(Math.random() * 100);
+        this.scoreIA = (int)(Math.random() * 101);
 
         if (scoreIA >= 30) {
 

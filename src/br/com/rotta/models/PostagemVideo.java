@@ -4,9 +4,11 @@ import br.com.rotta.enums.StatusMidia;
 
 public class PostagemVideo extends Midia {
 
+    // ATRIBUTOS
     private int duracaoSegundos;
     private String qualidade;
 
+    // CONSTRUTOR
     public PostagemVideo(int id, String urlArquivo,
                          String descricao, int usuarioId,
                          int duracaoSegundos, String qualidade) {
@@ -17,6 +19,7 @@ public class PostagemVideo extends Midia {
         this.qualidade = qualidade;
     }
 
+    // METODOS
     @Override
     public void enviar() {
 
@@ -24,17 +27,10 @@ public class PostagemVideo extends Midia {
         System.out.println("Arquivo: " + getUrlArquivo());
 
         validarDuracao();
-        extrairFrame();
 
         setStatus(StatusMidia.ENVIADO);
 
         System.out.println("Vídeo enviado com sucesso!");
-    }
-
-    @Override
-    public void cancelar() {
-        setStatus(StatusMidia.CANCELADO);
-        System.out.println("Enviado do vídeo " + getId() + " cancelado.");
     }
 
     public void validarDuracao() {
@@ -47,10 +43,6 @@ public class PostagemVideo extends Midia {
 
             System.out.println("Vídeo acima do limite.");
         }
-    }
-
-    public void extrairFrame() {
-        System.out.println("Frame extraído.");
     }
 
     // GETTERS E SETTERS

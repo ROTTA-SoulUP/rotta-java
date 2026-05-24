@@ -3,6 +3,7 @@ package br.com.rotta.models;
 import java.time.LocalDateTime;
 
 public class Usuario {
+
     // ATRIBUTOS
     private int id;
     private String nome;
@@ -13,6 +14,7 @@ public class Usuario {
     private LocalDateTime dataCadastro;
     private boolean ativo;
 
+    // CONSTRUTOR
     public Usuario(int id, String nome, String email, String cpf, String senhaHash, String telefone) {
         this.id = id;
         this.nome = nome;
@@ -24,6 +26,7 @@ public class Usuario {
         this.ativo = true; // Sempre começa ativo
     }
 
+    // METODOS
     public void cadastrar() {
         System.out.println("Usuário cadastrado!");
         System.out.println("\nNome: " + nome +
@@ -39,7 +42,7 @@ public class Usuario {
         }
     }
 
-    public void atualizaDados(String novoEmail, String novoTelefone) {
+    public void atualizarDados(String novoEmail, String novoTelefone) {
         this.email = novoEmail;
         this.telefone = novoTelefone;
         System.out.println("Dados atualizados com sucesso!");
@@ -50,7 +53,7 @@ public class Usuario {
         System.out.println("Conta de " + nome + " desativada.");
     }
 
-    //GETTERS E SETTERS
+    // GETTERS E SETTERS
     public int getId() {
         return id;
     }

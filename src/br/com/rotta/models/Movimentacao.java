@@ -21,10 +21,8 @@ public abstract class Movimentacao {
         this.status = "PENDENTE";
     }
 
-    // MÉTODOS ABSTRATOS
+    // METODOS
     public abstract void executar();
-    public abstract void cancelar();
-
     public String consultarStatus() {
         return "Status: " + status;
     }

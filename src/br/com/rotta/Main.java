@@ -8,7 +8,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        // ── Usuário e carteira ativos ──────────────────────
+        // DADOS INICIAIS
         Usuario usuarioAtivo = new Usuario(
                 1,
                 "Guilherme Almeida",
@@ -22,7 +22,7 @@ public class Main {
         Midia midiaAtiva = null;
         int desafioEscolhido = -1;
 
-        // ── Desafios disponíveis ───────────────────────────
+        // DESAFIOS DISPONIVEIS
         String[] titulosDesafios = {
                 "Selfie no Transporte",
                 "Reciclar Lixo",
@@ -54,6 +54,8 @@ public class Main {
             System.out.println("6 - Consultar carteira");
             System.out.println("7 - Resgatar crédito");
             System.out.println("8 - Ver desafios disponíveis");
+            System.out.println("9 - Atualizar email e telefone");
+            System.out.println("10 - Desativar conta");
             System.out.println("0 - Sair");
 
             System.out.print("Escolha uma opção: ");
@@ -263,7 +265,7 @@ public class Main {
 
                     if (carteiraAtiva.verificarLimite(150)) {
 
-                        // CORREÇÃO: passa 150 (custo fixo) em vez do saldo total
+                        // RESGATE COM CUSTO FIXO DE 150 PONTOS
                         Resgate resgate = new Resgate(
                                 1,
                                 150,
@@ -323,6 +325,25 @@ public class Main {
                     }
                 }
 
+                case 9 -> {
+                    System.out.println("\n----- ATUALIZAR EMAIL E TELEFONE -----");
+
+                    System.out.print("Novo email: ");
+                    String novoEmail = scanner.nextLine();
+
+                    System.out.print("Novo telefone: ");
+                    String novoTelefone = scanner.nextLine();
+
+                    usuarioAtivo.atualizarDados(novoEmail, novoTelefone);
+                    System.out.println("Email atual: " + usuarioAtivo.getEmail());
+                    System.out.println("Telefone atual: " + usuarioAtivo.getTelefone());
+                }
+
+                case 10 -> {
+                    System.out.println("\n----- DESATIVAR CONTA -----");
+                    usuarioAtivo.desativarConta();
+                }
+
                 case 0 -> {
                     System.out.println("\nEncerrando o sistema...");
                 }
@@ -332,7 +353,6 @@ public class Main {
                 }
             }
         }
-
         scanner.close();
     }
 }

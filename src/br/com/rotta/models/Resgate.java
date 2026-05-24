@@ -4,11 +4,13 @@ import java.util.Random;
 
 public class Resgate extends Movimentacao {
 
+    // ATRIBUTOS
     private double pontosUtilizados;
     private double valorCredito;
     private int diasRestantes;
     private String codigoQR;
 
+    // CONSTRUTOR
     public Resgate(int id, double pontosUtilizados, int carteiraId) {
 
         super(id, pontosUtilizados, carteiraId);
@@ -18,6 +20,7 @@ public class Resgate extends Movimentacao {
         this.diasRestantes = 7;
     }
 
+    // METODOS
     @Override
     public void executar() {
 
@@ -37,12 +40,6 @@ public class Resgate extends Movimentacao {
         setStatus("CONCLUIDO");
 
         System.out.println("Resgate realizado!");
-    }
-
-    @Override
-    public void cancelar() {
-        setStatus("CANCELADO");
-        System.out.println("Resgate " + getId() + " cancelado.");
     }
 
     public void gerarQRCode() {
