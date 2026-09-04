@@ -11,14 +11,14 @@ public abstract class Movimentacao {
     private double valor;
     private LocalDateTime dataMovimentacao;
     private StatusMovimentacao status; //Chama do ENUM StatusMovimento
-    private Carteira carteiraId; //Chama da classe Carteira
+    private Carteira carteira; //Chama da classe Carteira
 
     // CONSTRUTOR
 
     public Movimentacao(int id, double valor, Carteira carteiraId) {
         this.id = id;
         this.valor = valor;
-        this.carteiraId = carteiraId;
+        this.carteira = carteiraId;
         this.dataMovimentacao = LocalDateTime.now();
         this.status = StatusMovimentacao.PENDENTE;
     }
@@ -40,8 +40,8 @@ public abstract class Movimentacao {
         return valor;
     }
 
-    public Carteira getCarteiraId() {
-        return carteiraId;
+    public Carteira getCarteira() {
+        return carteira;
     }
 
     public StatusMovimentacao getStatus() {

@@ -1,101 +1,57 @@
 package br.com.rotta.models;
 
-import java.util.Random;
+import br.com.rotta.enums.StatusMovimentacao;
 
-public class Resgate extends Movimentacao {
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public class Resgate extends Movimentacao { //Herança
 
     // ATRIBUTOS
     private double pontosUtilizados;
     private double valorCredito;
-    private int diasRestantes;
     private String codigoQR;
+    private LocalDateTime dataExpiracao;
 
     // CONSTRUTOR
-    public Resgate(int id, double pontosUtilizados, int carteiraId) {
-
-        super(id, pontosUtilizados, carteiraId);
-
+    public Resgate(int id, double pontosUtilizados, double valorCredito, Carteira carteira) {
+        super(id, pontosUtilizados, carteira);
         this.pontosUtilizados = pontosUtilizados;
-        this.valorCredito = 5.30;
-        this.diasRestantes = 7; // Sempre que o usuário resgata ele tem determinados dias para utilizar o QR Code
+        this.valorCredito = valorCredito;
     }
 
     // METODOS
     @Override
     public void executar() {
-
-        if (pontosUtilizados < 150) {
-
-            setStatus("PENDENTE");
-
-            System.out.println("Pontos insuficientes para resgate.");
-
-            System.out.println("Você precisa de 150 pontos.");
-
-            return;
+        System.out.println("Processando resgate de " + pontosUtilizados + " pontos...");
+        getCarteira().debitarPontos(this.pontosUtilizados);
+        gerarQRCode();
+        setStatus(StatusMovimentacao.CONCLUIDA);
+        System.out.println("Resgate concluído! Sua passagem está pronta.");
         }
 
-        gerarQRCode();
-
-        setStatus("CONCLUIDO");
-
-        System.out.println("Resgate realizado!");
-    }
-
     public void gerarQRCode() {
-
-        Random random = new Random();
-
-        int numero = random.nextInt(9000) + 1000; // Número alto para gerar várias opões de códigos
-
-        codigoQR = "QR-ROTTA-" + numero;
-
+        this.codigoQR = UUID.randomUUID().toString();
+        this.dataExpiracao = LocalDateTime.now().plusHours(24);
         System.out.println("QR Code gerado: " + codigoQR);
+        System.out.println("Válido até: " + dataExpiracao);
     }
 
-    public void validarQRCode() {
-        System.out.println("QR Code validado.");
+    public boolean validarQRCode() {
+        boolean valido = !verificarExpiracao();
+        if (valido) {
+            System.out.println("QR Code válido! Catraca liberada.");
+        } else {
+            System.out.println("QR Code expirado. Gere um novo resgate.");
+        }
+        return valido;
     }
 
-    public void verificarExpiracao() {
-        System.out.println("Validade confirmada.");
-    }
-
-    @Override
-    public String consultarStatus() {
-        return "Status do resgate: " + getStatus();
-    }
-
-    // GETTERS E SETTERS
-    public double getPontosUtilizados() {
-        return pontosUtilizados;
-    }
-
-    public double getValorCredito() {
-        return valorCredito;
-    }
-
-    public int getDiasRestantes() {
-        return diasRestantes;
+    public boolean verificarExpiracao() {
+        return LocalDateTime.now().isAfter(this.dataExpiracao);
     }
 
     public String getCodigoQR() {
         return codigoQR;
-    }
-
-    public void setPontosUtilizados(double pontosUtilizados) {
-        this.pontosUtilizados = pontosUtilizados;
-    }
-
-    public void setValorCredito(double valorCredito) {
-        this.valorCredito = valorCredito;
-    }
-
-    public void setDiasRestantes(int diasRestantes) {
-        this.diasRestantes = diasRestantes;
-    }
-
-    public void setCodigoQR(String codigoQR) {
-        this.codigoQR = codigoQR;
     }
 }
