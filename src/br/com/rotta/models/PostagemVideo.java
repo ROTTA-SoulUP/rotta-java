@@ -9,56 +9,26 @@ public class PostagemVideo extends Midia {
     private String qualidade;
 
     // CONSTRUTOR
-    public PostagemVideo(int id, String urlArquivo,
-                         String descricao, int usuarioId,
-                         int duracaoSegundos, String qualidade) {
-
-        super(id, urlArquivo, descricao, usuarioId);
-
+    public PostagemVideo(int id, String urlArquivo, Usuario usuario, ParticipacaoDesafio participacao, int duracaoSegundos, String qualidade) {
+        super(id, urlArquivo, usuario, participacao);
         this.duracaoSegundos = duracaoSegundos;
         this.qualidade = qualidade;
     }
 
-    // METODOS
+    // MÉTODOS
     @Override
     public void enviar() {
-
-        System.out.println("Iniciando o envio de video...");
-        System.out.println("Arquivo: " + getUrlArquivo());
-
+        System.out.println("Enviando vídeo em qualidade " + qualidade + "...");
         validarDuracao();
-
         setStatus(StatusMidia.ENVIADO);
-
-        System.out.println("Vídeo enviado com sucesso!");
+        System.out.println("Vídeo enviado com sucesso! Aguardando validação da IA.");
     }
 
     public void validarDuracao() {
-
         if (duracaoSegundos <= 60) {
-
-            System.out.println("Duração válida.");
-
+            System.out.println("Duração de " + duracaoSegundos + "s dentro do limite permitido.");
         } else {
-
-            System.out.println("Vídeo acima do limite.");
+            System.out.println("Atenção: o video passou do tempo máximo recomendado.");
         }
-    }
-
-    // GETTERS E SETTERS
-    public int getDuracaoSegundos() {
-        return duracaoSegundos;
-    }
-
-    public void setDuracaoSegundos(int duracaoSegundos) {
-        this.duracaoSegundos = duracaoSegundos;
-    }
-
-    public String getQualidade() {
-        return qualidade;
-    }
-
-    public void setQualidade(String qualidade) {
-        this.qualidade = qualidade;
     }
 }

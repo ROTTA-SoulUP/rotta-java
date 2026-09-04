@@ -41,6 +41,7 @@ public class ParticipacaoDesafio {
         System.out.println("Desafio \"" + desafio.getNome() + "\" foi cancelado.");
     }
 
+    //GETTERS
     public int getId() { return id; }
     public Usuario getUsuario() { return usuario; }
     public Desafio getDesafio() { return desafio; }

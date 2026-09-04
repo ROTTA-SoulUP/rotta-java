@@ -8,44 +8,25 @@ public class PostagemFoto extends Midia {
     private String localizacao;
 
     // CONSTRUTOR
-    public PostagemFoto(int id, String urlArquivo,
-                        String descricao, int usuarioId,
-                        String localizacao) {
-
-        super(id, urlArquivo, descricao, usuarioId);
-
+    public PostagemFoto(int id, String urlArquivo, Usuario usuario, ParticipacaoDesafio participacao, String localizacao) {
+        super(id, urlArquivo, usuario, participacao);
         this.localizacao = localizacao;
     }
 
-    // METODOS
+    // MÉTODOS
     @Override
     public void enviar() {
-
-        System.out.println("Iniciando envio de foto...");
-        System.out.println("Arquivo: " + getUrlArquivo());
-
-        validarFoto();
+        System.out.println("Enviando foto tirada em: " + localizacao + "...");
         comprimirImagem();
-
         setStatus(StatusMidia.ENVIADO);
-
-        System.out.println("Foto enviada com sucesso!");
+        System.out.println("Foto enviada com sucesso! Aguardando validação da IA.");
     }
 
     public void validarFoto() {
-        System.out.println("Formato detectado automaticamente pelo sistema.");
+        System.out.println("Verificando se o arquivo é realmente uma imagem válida...");
     }
 
     public void comprimirImagem() {
-        System.out.println("Imagem otimizada.");
-    }
-
-    // GETTERS E SETTERS
-    public String getLocalizacao() {
-        return localizacao;
-    }
-
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
+        System.out.println("Comprimindo imagem para economizar dados do usuário...");
     }
 }
