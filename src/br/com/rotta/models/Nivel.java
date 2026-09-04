@@ -17,8 +17,10 @@ public class Nivel {
     //METODO
     public Nivel verificarNivelAtual(int diasConsecutivos) {
         if (diasConsecutivos >= this.diasStreakMinimo) {
+            System.out.println("Parabéns! Voce atingiu o nível " + nome + " com " + diasConsecutivos + " dias de streak!");
             return this;
         }
+        System.out.println("Você está quase alcançando o próximo nível da Capi! Faltam apenas " + (diasStreakMinimo - diasConsecutivos) + "dias! Uhuuul!");
         return null;
     }
 

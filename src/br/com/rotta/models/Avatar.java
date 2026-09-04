@@ -16,7 +16,11 @@ public class Avatar {
 
     //METODOS
     public void exibirAvatar() {
-        System.out.println("Avatar atual: " + descricao + "(Nível: " + nivel.getNome() + ")");
+        System.out.println("---------------------------------------------------------------" +
+                            "Seu avatar da Capi evoluiu! Olha que linda que ela está agora! " +
+                            "Nível: " + nivel.getNome() +
+                            "Aparência: " + descricao +
+                            "-------------------------------------------------------------");
     }
 
     //GETTERS

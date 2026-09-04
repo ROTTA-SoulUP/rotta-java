@@ -31,90 +31,61 @@ public class Usuario {
         System.out.println("Usuário cadastrado!");
         System.out.println("\nNome: " + nome +
                             "\nEmail: " + email +
-                            "\nData: " + dataCadastro.toLocalDate());
+                            "\nData do cadastro: " + dataCadastro.toLocalDate() +
+                            "\nBem-vindo a Rotta, " + nome + "! Sua jornada sustentável começa agora.");
     }
 
     public void login() {
         if (ativo) {
             System.out.println("Login realizado. Bem-vindo, " + nome + "!");
         } else {
-            System.out.println("Conta desativada. Contate o suporte.");
+            System.out.println("Nao foi possivel entrar. Sua conta esta desativada, contate o suporte.");
         }
     }
 
     public void atualizarDados(String novoEmail, String novoTelefone) {
+        String emailAntigo = this.email;
+        String telefoneAntigo = this.telefone;
         this.email = novoEmail;
         this.telefone = novoTelefone;
-        System.out.println("Dados atualizados com sucesso!");
+        System.out.println("Dados atualizados com sucesso!" +
+                            "Email: " + emailAntigo + " - - " + novoEmail +
+                            "Telefone: " + telefoneAntigo + " - - " + novoTelefone);
     }
 
     public void desativarConta() {
         this.ativo = false;
-        System.out.println("Conta de " + nome + " desativada.");
+        System.out.println("Poxa, " + nome + "! Sua contra foi desativada. Sentiremos sua falta na Rotta, " + nome + ".");
     }
 
     // GETTERS E SETTERS
+
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getSenhaHash() {
-        return senhaHash;
-    }
-
-    public void setSenhaHash(String senhaHash) {
-        this.senhaHash = senhaHash;
-    }
-
     public String getTelefone() {
         return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
     }
 
     public LocalDateTime getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(LocalDateTime dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
-
     public boolean isAtivo() {
         return ativo;
     }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
 }
+
