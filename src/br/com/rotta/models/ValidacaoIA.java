@@ -7,107 +7,44 @@ public class ValidacaoIA {
 
     // ATRIBUTOS
     private int id;
-    private int scoreIA;
+    private double scoreIA;
     private ResultadoValidacao statusValidacao;
     private String observacao;
     private LocalDateTime dataAnalise;
-    private int midiaId;
+    private Midia midia;
 
-    // CONSTRUTOR
-    public ValidacaoIA(int id, int midiaId) {
-
+    //CONSTRUTOR
+    public ValidacaoIA(int id) {
         this.id = id;
-        this.midiaId = midiaId;
-        this.dataAnalise = LocalDateTime.now();
     }
 
-    // METODOS
+    //MÉTODOS
     public void analisarMidia(Midia midia) {
-
-        if (midia instanceof PostagemFoto) {
-
-            System.out.println("IA analisando imagem...");
-
-        } else if (midia instanceof PostagemVideo) {
-
-            System.out.println("IA analisando vídeo...");
-        }
-
-        System.out.println("Verificando autenticidade...");
-
-        this.scoreIA = (int)(Math.random() * 101); // Gera número aleatório para a simulação do scoreIA
-
-        if (scoreIA >= 30) {
-
+        this.midia = midia;
+        System.out.println("Analisando autenticidade da midia com Inteligência Artificial...");
+        this.scoreIA = Math.random() * 100;
+        this.dataAnalise = LocalDateTime.now();
+        if (this.scoreIA >= 30) {
             this.statusValidacao = ResultadoValidacao.APROVADO;
-
-            this.observacao =
-                    "Seu post foi verificado e aceito com sucesso!";
-
+            this.observacao = "Mídia validada com sucesso.";
         } else {
-
             this.statusValidacao = ResultadoValidacao.REJEITADO;
-
-            this.observacao =
-                    "Ops... seu post foi invalidado em nossa verificação.";
+            this.observacao = "Não foi possível confirmar a autenticidade da mídia.";
         }
-
-        System.out.println("Score: " + scoreIA + "/100");
-        System.out.println("Resultado: " + statusValidacao);
+        exibirResultado();
     }
 
     public void exibirResultado() {
-
-        System.out.println("\nResultado da Validação:");
-
-        System.out.println("ID: " + id);
-
-        System.out.println("Mídia ID: " + midiaId);
-
-        System.out.println("Score: " + scoreIA);
-
-        System.out.println("Status: " + statusValidacao);
+        System.out.println("Score obtido: " + String.format("%.2f", scoreIA) + "/100" +
+                            "Resultado: " + statusValidacao +
+                            "Observação: " + observacao);
     }
 
     public boolean foiAprovado() {
-        return statusValidacao == ResultadoValidacao.APROVADO;
+        return this.statusValidacao == ResultadoValidacao.APROVADO;
     }
 
-    // GETTERS E SETTERS
-
-    public int getId() {
-        return id;
-    }
-
-    public int getScoreIA() {
-        return scoreIA;
-    }
-
-    public ResultadoValidacao getStatusValidacao() {
-        return statusValidacao;
-    }
-
-    public String getObservacao() {
-        return observacao;
-    }
-
-    public LocalDateTime getDataAnalise() {
-        return dataAnalise;
-    }
-
-    public int getMidiaId() {
-        return midiaId;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setScoreIA(int scoreIA) {
-        this.scoreIA = scoreIA;
-    }
-
-    public void setMidiaId(int midiaId) {
-        this.midiaId = midiaId;
-    }
+    //GETTERS
+    public double getScoreIA() { return scoreIA; }
+    public Midia getMidia() { return midia; }
 }
