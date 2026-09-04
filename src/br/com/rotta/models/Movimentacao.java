@@ -1,5 +1,7 @@
 package br.com.rotta.models;
 
+import br.com.rotta.enums.StatusMovimentacao;
+
 import java.time.LocalDateTime;
 
 public abstract class Movimentacao {
@@ -8,30 +10,28 @@ public abstract class Movimentacao {
     private int id;
     private double valor;
     private LocalDateTime dataMovimentacao;
-    private String status;
-    private int carteiraId;
+    private StatusMovimentacao status; //Chama do ENUM StatusMovimento
+    private Carteira carteiraId; //Chama da classe Carteira
 
     // CONSTRUTOR
-    public Movimentacao(int id, double valor, int carteiraId) {
 
+    public Movimentacao(int id, double valor, Carteira carteiraId) {
         this.id = id;
         this.valor = valor;
         this.carteiraId = carteiraId;
         this.dataMovimentacao = LocalDateTime.now();
-        this.status = "PENDENTE";
+        this.status = StatusMovimentacao.PENDENTE;
     }
 
     // METODOS
     public abstract void executar();
-    public String consultarStatus() {
-        return "Status: " + status;
-    }
 
-    protected void setStatus(String status) {
-        this.status = status;
+    public String consultarStatus() {
+        return this.status.toString();
     }
 
     // GETTERS E SETTERS
+
     public int getId() {
         return id;
     }
@@ -40,27 +40,15 @@ public abstract class Movimentacao {
         return valor;
     }
 
-    public LocalDateTime getDataMovimentacao() {
-        return dataMovimentacao;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public int getCarteiraId() {
+    public Carteira getCarteiraId() {
         return carteiraId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public StatusMovimentacao getStatus() {
+        return status;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public void setCarteiraId(int carteiraId) {
-        this.carteiraId = carteiraId;
+    protected void setStatus(StatusMovimentacao status) {
+        this.status = status;
     }
 }
