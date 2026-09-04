@@ -8,6 +8,7 @@ public class Carteira {
     private int id;
     private double saldoPontos;
     private LocalDateTime ultimaAtualizacao;
+    private Usuario usuario;
     private int usuarioId;
 
     // CONSTRUTOR
@@ -33,46 +34,26 @@ public class Carteira {
             System.out.println("Pontos debitados: " + pontos);
             System.out.println("Saldo Atual: " + saldoPontos + " pontos.");
         } else {
-            System.out.println("Saldo insuficiente.");
+            System.out.println("Saldo insuficiente para essa operação. \nVocê tem " + " pontos.");
         }
     }
 
-    public String consultarSaldo() {
-        return "Saldo: " + saldoPontos + " pontos";
+    public double consultarSaldo() {
+        System.out.println("Seu saldo atual é de " + saldoPontos + "pontos! (Exclusivos para transporte público)");
+        return this.saldoPontos;
     }
 
     // Verifica se tem saldo suficiente para uma operação
     public boolean verificarLimite(double pontos) {
-    return saldoPontos >= pontos;
+        return this.saldoPontos >= pontos;
     }
 
     // GETTERS E SETTERS
-
     public int getId() {
         return id;
     }
 
-    public double getSaldoPontos() {
-        return saldoPontos;
-    }
-
-    public LocalDateTime getUltimaAtualizacao() {
-        return ultimaAtualizacao;
-    }
-
-    public int getUsuarioId() {
-        return usuarioId;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setSaldoPontos(double saldoPontos) {
-        this.saldoPontos = saldoPontos;
-    }
-
-    public void setUsuarioId(int usuarioId) {
-        this.usuarioId = usuarioId;
+    public Usuario getUsuario() {
+        return usuario;
     }
 }
