@@ -11,16 +11,17 @@ public class Capi {
     }
 
     //MÉTODOS - A Capi só orienta o usuário, não guarda nenhum dado dele.
-    public String sugerirDica(String funcionalidade) { //Aqui a Capi aparece para direcionar o usuário com balões explicativos
+    public String sugerirDica(String funcionalidade) {
         String dica;
-        switch (funcionalidade) { //Foi utilizado o switch, pois para essa funcionalidade pensamos que seria melhor usar essa estrutura de repetição pela organização
+        switch (funcionalidade) {
             case "desafio":
-                dica = "Escolha um desafio sustentável e envie a comprovação para ganhar pontos!";
+                dica = "Escolha um desafio sustentavel e envie a comprovacao para ganhar pontos!";
                 break;
             case "carteira":
-                dica = "Acompanhe seu saldo aqui e resgate créditos de transporte quando atingir o valor necessário!";
+                dica = "Acompanhe seu saldo aqui e resgate creditos de transporte quando atingir o valor necessario!";
+                break;
             case "streak":
-                dica = "Mantenha sua sequência diária para eu evoluir junto com você!";
+                dica = "Mantenha sua sequencia diaria para eu evoluir junto com voce!";
                 break;
             default:
                 dica = "Estou aqui para te ajudar, mande uma mensagem se precisar, ta bom?";

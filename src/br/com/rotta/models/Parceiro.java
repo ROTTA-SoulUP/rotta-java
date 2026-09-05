@@ -1,6 +1,6 @@
 package br.com.rotta.models;
 
-import br.com.rotta.enums.TipoParceiro;
+import br.com.rotta.enums.*;
 
 public class Parceiro {
 

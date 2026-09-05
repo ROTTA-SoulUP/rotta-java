@@ -35,9 +35,9 @@ public class ValidacaoIA {
     }
 
     public void exibirResultado() {
-        System.out.println("Score obtido: " + String.format("%.2f", scoreIA) + "/100" +
-                            "Resultado: " + statusValidacao +
-                            "Observação: " + observacao);
+        System.out.println("Score obtido: " + String.format("%.2f", scoreIA) + "/100");
+        System.out.println("Resultado: " + statusValidacao);
+        System.out.println("Observacao: " + observacao);
     }
 
     public boolean foiAprovado() {

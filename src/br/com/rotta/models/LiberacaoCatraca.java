@@ -23,13 +23,13 @@ public class LiberacaoCatraca {
     public boolean liberarViaNFC(RottaCard cartao) {
         this.tipoMetodo = MetodoLiberacao.NFC;
         System.out.println("Aproximando o Rotta Card no validador...");
-        if (cartao.isAtivo() && cartao.getCarteira().consultarSaldo() > 0) {
+        if (cartao.isAtivo() && cartao.getCarteira().getSaldoPontos() > 0) {
             this.status = StatusLiberacao.VALIDADA;
-            System.out.println("Catraca libereada via NFC! Boa viagem!");
+            System.out.println("Catraca liberada via NFC! Boa viagem!");
             return true;
         }
         this.status = StatusLiberacao.NEGADA;
-        System.out.println("Liberação negada. Verifique seu saldo ou o estado do cartão.");
+        System.out.println("Liberacao negada. Verifique seu saldo ou o estado do cartao.");
         return false;
     }
 

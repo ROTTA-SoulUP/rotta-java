@@ -16,7 +16,7 @@ public class Streak {
     public Streak(int id, Usuario usuario) {
         this.id = id;
         this.usuario = usuario;
-        this.diasConsecutivos = diasConsecutivos = 0;
+        this.diasConsecutivos = 0;
     }
 
     //METODOS

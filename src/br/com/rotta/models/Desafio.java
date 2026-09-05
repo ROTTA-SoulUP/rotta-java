@@ -1,6 +1,6 @@
 package br.com.rotta.models;
 
-import br.com.rotta.enums.FormatoMidia;
+import br.com.rotta.enums.*;
 
 public class Desafio {
     private int id;
@@ -24,12 +24,10 @@ public class Desafio {
 
     //MÉTODOS
     public void exibirDesafio() {
-        System.out.println("-----------------------------------------" +
-                            "Desafio: " + nome +
-                            "Formato exigido: " + tipoFormato +
-                            "Recompensa: " + pontosDesafio + "pontos" +
-                            "Patrocinado por: " + parceiro.getNome() +
-                            "-----------------------------------------");
+        System.out.println("Desafio: " + nome);
+        System.out.println("Formato exigido: " + tipoFormato);
+        System.out.println("Recompensa: " + pontosDesafio + " pontos");
+        System.out.println("Patrocinado por: " + parceiro.getNome());
     }
 
     //GETTERS

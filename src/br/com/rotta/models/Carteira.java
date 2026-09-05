@@ -39,7 +39,7 @@ public class Carteira {
     }
 
     public double consultarSaldo() {
-        System.out.println("Seu saldo atual é de " + saldoPontos + "pontos! (Exclusivos para transporte público)");
+        System.out.println("Seu saldo atual eh de " + saldoPontos + " pontos! (Exclusivos para transporte publico)");
         return this.saldoPontos;
     }
 
@@ -48,12 +48,19 @@ public class Carteira {
         return this.saldoPontos >= pontos;
     }
 
-    // GETTERS E SETTERS
+    public double getSaldoPontos() {
+        return saldoPontos;
+    }
+
     public int getId() {
         return id;
     }
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public int getUsuarioId() {
+        return usuarioId;
     }
 }
