@@ -2,33 +2,25 @@ package br.com.rotta.models;
 
 public class Pontuacao {
 
-    //ATRIBUTOS
     private int id;
     private double pontosAtribuidos;
-    private ValidacaoIA validacao;
 
-    //CONSTRUTOR
-    public Pontuacao(int id, ValidacaoIA validacao) {
+    // Cria uma pontuação.
+    public Pontuacao(int id, double pontosAtribuidos) {
         this.id = id;
-        this.validacao = validacao;
+        this.pontosAtribuidos = pontosAtribuidos;
     }
 
-    //MÉTODOS
-    public void calcularPontos() {
-        if (validacao.foiAprovado()) {
-            int pontosDoDesafio = validacao.getMidia().getParticipacao().getDesafio().getPontosDesafio();
-            this.pontosAtribuidos = pontosDoDesafio;
-            System.out.println("Validação aprovada! Você ganhou " + pontosAtribuidos + " pontos.");
-        } else {
-            this.pontosAtribuidos = 0;
-            System.out.println("Como a validação foi rejeitada, nenhum ponto foi atribuído dessa vez.");
-        }
+    // Retorna a quantidade de pontos atribuídos ao usuário.
+    public double calcularPontos() {
+        return pontosAtribuidos;
     }
 
-    public void executar() {
-        calcularPontos();
+    public int getId() {
+        return id;
     }
 
-    //GETTER
-    public double getPontosAtribuidos() { return pontosAtribuidos; }
+    public double getPontosAtribuidos() {
+        return pontosAtribuidos;
+    }
 }

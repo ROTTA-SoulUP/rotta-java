@@ -1,8 +1,7 @@
 package br.com.rotta.enums;
 
+// Situacao de uma movimentacao (credito ou resgate de pontos)
 public enum StatusMovimentacao {
-
-    // STATUS DA MOVIMENTAÇÃO
     PENDENTE,
     CONCLUIDA,
     CANCELADA

@@ -1,8 +1,7 @@
 package br.com.rotta.enums;
 
+// Forma que o usuario usou para liberar a catraca
 public enum MetodoLiberacao {
-
-    // Métodos de liberação
-    NFC, // Liberação via NFC
-    QRCODE // Liberação via código QR
+    NFC,
+    QRCODE
 }

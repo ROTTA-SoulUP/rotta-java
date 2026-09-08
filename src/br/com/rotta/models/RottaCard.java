@@ -1,32 +1,39 @@
 package br.com.rotta.models;
 
 public class RottaCard {
-    //ATRIBUTOS
     private int id;
     private String codigoNfc;
     private boolean ativo;
     private Carteira carteira;
 
-    //CONSTRUTOR
-    public RottaCard(int id, String codigoNfc, Carteira carteira) {
+    public RottaCard(int id, String codigoNfc, boolean ativo) {
         this.id = id;
         this.codigoNfc = codigoNfc;
+        this.ativo = ativo;
+    }
+
+    public void vincularCartao(Carteira carteira) {
         this.carteira = carteira;
-        this.ativo = true;
+        System.out.println("Cartão NFC vinculado à carteira " + carteira.getId() + ".");
     }
 
-    //MÉTODOS
     public String identificar() {
-        System.out.println("Lendo cartão NFC...");
-        return this.codigoNfc;
+        return codigoNfc;
     }
 
-    //GETTERS
     public boolean isAtivo() {
         return ativo;
     }
 
     public Carteira getCarteira() {
         return carteira;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getCodigoNfc() {
+        return codigoNfc;
     }
 }

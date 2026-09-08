@@ -4,63 +4,71 @@ import java.time.LocalDateTime;
 
 public class Carteira {
 
-    // ATRIBUTOS
     private int id;
     private double saldoPontos;
     private LocalDateTime ultimaAtualizacao;
-    private Usuario usuario;
-    private int usuarioId;
+    private String tipoUso;
 
-    // CONSTRUTOR
-    public Carteira(int id, int usuarioId) {
+    // Cria a carteira com o seu saldo inicial e define quando ela foi atualizada.
+    public Carteira(int id, double saldoPontos,
+                    LocalDateTime ultimaAtualizacao, String tipoUso) {
+
         this.id = id;
-        this.usuarioId = usuarioId;
-        this.saldoPontos = 0; // Já começa zerada a carteira
-        this.ultimaAtualizacao = LocalDateTime.now();
-    }
+        this.saldoPontos = saldoPontos;
+        this.ultimaAtualizacao = ultimaAtualizacao;
+        this.tipoUso = tipoUso;
 
-    // METODOS
-    public void creditarPontos(double pontos) {
-        this.saldoPontos += pontos;
-        this.ultimaAtualizacao = LocalDateTime.now();
-        System.out.println("Pontos creditados: " + pontos);
-        System.out.println("Saldo Atual: " + saldoPontos + " pontos.");
-    }
-
-    public void debitarPontos(double pontos) {
-        if (verificarLimite(pontos)) {
-            this.saldoPontos -= pontos;
+        // Caso nenhuma data seja informada, usamos a data e hora atuais.
+        if (this.ultimaAtualizacao == null) {
             this.ultimaAtualizacao = LocalDateTime.now();
-            System.out.println("Pontos debitados: " + pontos);
-            System.out.println("Saldo Atual: " + saldoPontos + " pontos.");
-        } else {
-            System.out.println("Saldo insuficiente para essa operação. \nVocê tem " + " pontos.");
         }
     }
 
+    // Adiciona pontos ao saldo da carteira.
+    public void creditarPontos(double pontos) {
+        saldoPontos += pontos;
+        ultimaAtualizacao = LocalDateTime.now();
+
+        System.out.println("Foram creditados " + pontos
+                + " pontos! Saldo atual: " + saldoPontos);
+    }
+
+    // Retira pontos da carteira somente se houver saldo suficiente.
+    public void debitarPontos(double pontos) {
+        if (verificarSaldo(pontos)) {
+            saldoPontos -= pontos;
+            ultimaAtualizacao = LocalDateTime.now();
+
+            System.out.println("Foram debitados " + pontos
+                    + " pontos! Saldo atual: " + saldoPontos);
+        } else {
+            System.out.println("Saldo insuficiente para essa operação.");
+        }
+    }
+
+    // Consulta o saldo atual da carteira.
     public double consultarSaldo() {
-        System.out.println("Seu saldo atual eh de " + saldoPontos + " pontos! (Exclusivos para transporte publico)");
-        return this.saldoPontos;
-    }
-
-    // Verifica se tem saldo suficiente para uma operação
-    public boolean verificarLimite(double pontos) {
-        return this.saldoPontos >= pontos;
-    }
-
-    public double getSaldoPontos() {
         return saldoPontos;
+    }
+
+    // Verifica se a carteira possui pontos suficientes para uma operação.
+    public boolean verificarSaldo(double pontos) {
+        return saldoPontos >= pontos;
     }
 
     public int getId() {
         return id;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public double getSaldoPontos() {
+        return saldoPontos;
     }
 
-    public int getUsuarioId() {
-        return usuarioId;
+    public LocalDateTime getUltimaAtualizacao() {
+        return ultimaAtualizacao;
+    }
+
+    public String getTipoUso() {
+        return tipoUso;
     }
 }

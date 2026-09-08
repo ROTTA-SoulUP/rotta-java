@@ -1,9 +1,8 @@
 package br.com.rotta.enums;
 
+// Representa em qual etapa a midia (foto/video) esta no processo de envio
 public enum StatusMidia {
-
-    // STATUS DA MÍDIA
-    PENDENTE, // Acabou de ser criada, aguardando o envio (Sempre começa pendente)
-    ENVIADO, // Foi enviada para analise da IA
+    PENDENTE,
+    ENVIADO,
     AGUARDANDO_SINCRONIZACAO
 }

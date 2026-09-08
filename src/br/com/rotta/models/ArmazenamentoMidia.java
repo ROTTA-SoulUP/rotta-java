@@ -1,27 +1,47 @@
 package br.com.rotta.models;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArmazenamentoMidia {
+    private List<Midia> midiasArmazenadas = new ArrayList<>();
 
-    //ATRIBUTO | HASHMAP
-    private Map<String, Midia> midiasArmazenadas = new HashMap<>();
-
-    //MÉTODOS
     public String salvar(Midia midia) {
-        String url = "storage/" + midia.getId() + ".dat";
-        midiasArmazenadas.put(url, midia);
-        System.out.println("Mídia armazenada com segurança em: " + url);
-        return url;
+        if (!midiasArmazenadas.contains(midia)) {
+            midiasArmazenadas.add(midia);
+        }
+
+        System.out.println("Mídia salva no armazenamento do dispositivo: " + midia.getNomeArquivo());
+        return midia.getNomeArquivo();
     }
 
-    public Midia recuperar(String url) {
-        System.out.println("Buscando mídia em: " + url);
-        return midiasArmazenadas.get(url);
+    public Midia recuperar(String nomeArquivo) {
+        for (Midia midia : midiasArmazenadas) {
+            if (midia.getNomeArquivo().equalsIgnoreCase(nomeArquivo)) {
+                return midia;
+            }
+        }
+
+        System.out.println("Mídia não encontrada no armazenamento.");
+        return null;
     }
 
-    public void excluir(String url) {
-        midiasArmazenadas.remove(url);
-        System.out.println("Mídia removida do armazenamento.");
+    public void listarMidias() {
+        if (midiasArmazenadas.isEmpty()) {
+            System.out.println("Nenhuma mídia salva no armazenamento.");
+            return;
+        }
+
+        System.out.println("\n===== MÍDIAS SALVAS =====");
+
+        for (Midia midia : midiasArmazenadas) {
+            System.out.println("- " + midia.getNomeArquivo());
+        }
+    }
+
+    public void remover(Midia midia) {
+        if (midiasArmazenadas.remove(midia)) {
+            System.out.println("Mídia removida do armazenamento.");
+        }
     }
 }

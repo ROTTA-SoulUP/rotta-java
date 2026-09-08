@@ -1,590 +1,491 @@
 package br.com.rotta;
 
-import br.com.rotta.models.*;
 import br.com.rotta.enums.*;
+import br.com.rotta.models.*;
 
-import java.util.Scanner;
 import java.time.LocalDateTime;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
-    // ATRIBUTOS  --------------------
-    private Scanner scanner;
-    private Usuario usuarioLogado;
-    private Carteira carteiraAtual;
-    private boolean appAberto;
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final List<Usuario> usuariosCadastrados = new ArrayList<>();
+    private static final double PONTOS_POR_PASSAGEM = 150.0;
 
-    // CONSTANTES DE VALIDAÇÃO  --------------------
-    private static final String REGEX_EMAIL = "^[A-Za-z0-9+_.-]+@(.+)$"; //^ e $ abrem e fecham a linha.
-    private static final String REGEX_TELEFONE = "^d{2} \\d{4,5}-\\d{4}$";
-    private static final int TAMANHO_CPF = 11;
-    private static final int TAMANHO_MINIMO_SENHA = 6;
-    private static final int TAMANHO_MINIMO_NOME = 3;
+    private static Usuario usuarioLogado;
+    private static Carteira carteiraUsuario;
+    private static Streak streakUsuario;
+    private static Capi capi;
+    private static ArmazenamentoMidia armazenamento;
+    private static Midia ultimaMidiaEnviada;
+    private static ParticipacaoDesafio participacaoAtual;
+    private static RottaCard cartaoUsuario;
+    private static Resgate ultimoResgate;
 
-    // CONSTRUTOR  --------------------
-    public Main() {
-        this.scanner = new Scanner(System.in);
-        this.appAberto = true;
-    }
+    private static final Desafio[] desafios = {
+            new Desafio(1, "1 - Caminhada no Parque", FormatoMidia.VIDEO, 30, 60),
+            new Desafio(2, "2 - Descarte Inteligente", FormatoMidia.FOTO, 0, 50),
+            new Desafio(3, "3 - Almoço Saudável", FormatoMidia.FOTO, 0, 40),
+            new Desafio(4, "4 - Evitando Sacolas Plásticas", FormatoMidia.FOTO, 0, 30)
+    };
 
-    // METODO PRINCIPAL --------------------
     public static void main(String[] args) {
-        Main app = new Main();
-        app.iniciarApp();
-    }
+        int opcao;
 
-    // FLUXO PRINCIPAL DO APLICATIVO  -----
-    /**
-     * Inicia o aplicativo, exibe tela inicial e controla o loop principal
-     */
-    private void iniciarApp() {
-        exibirTelaInicial();
+        do {
+            System.out.println("\n========== ROTTA ==========");
+            System.out.println("1 - Cadastrar");
+            System.out.println("2 - Login");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
 
-        while (appAberto) {
-            if (usuarioLogado == null) {
-                telaAutenticacao();
-            } else {
-                telaAppPrincipal();
+            opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    cadastrarUsuario();
+                    break;
+                case 2:
+                    fazerLogin();
+                    break;
+                case 0:
+                    System.out.println("Encerrando o Rotta...");
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
             }
-        }
+        } while (opcao != 0);
+
         scanner.close();
     }
 
+    private static void cadastrarUsuario() {
+        System.out.println("\n========== CADASTRO ==========");
 
-    // TELA INICIAL  ----------------------
-    /**
-     * Exibe a tela de boas-vindas do aplicativo
-     */
-    private void exibirTelaInicial() {
-        System.out.println("\n");
-        System.out.println("===================================");
-        System.out.println("        BEM-VINDO AO ROTTA");
-        System.out.println("           from SoulUp");
-        System.out.println("===================================");
-        System.out.println("     Seu caminho, nossa rotta.");
-        System.out.println("===================================");
-    }
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
 
-    // TELA DE AUTENTICAÇÃO  --------------------
-    /**
-     * Exibe menu de autenticação (Cadastro, Login ou Sair)
-     */
-    private void telaAutenticacao() {
-        System.out.println("\n--- AUTENTICAÇÃO ---");
-        System.out.println("1. Novo Cadastro");
-        System.out.println("2. Login");
-        System.out.println("3. Sair do App");
-        System.out.print("Escolha: ");
-
-        int opcao = lerInteiro();
-
-        switch (opcao) {
-            case 1 -> realizarCadastro();
-            case 2 -> realizarLogin();
-            case 3 -> appAberto = false;
-            default -> System.out.println("Opção inválida.");
-        }
-    }
-
-    /**
-     * Realiza o cadastro de novo usuário com validações de segurança
-     * Valida: nome (tamanho mínimo), email (formato), CPF (11 dígitos),
-     * telefone (formato brasileiro), senha (tamanho mínimo)
-     */
-    private void realizarCadastro() {
-        System.out.println("\n--- NOVO CADASTRO ---");
-
-        // VALIDAR NOME --------------------
-        String nome;
-        while (true) {
-            System.out.print("Nome completo: ");
-            nome = scanner.nextLine().trim();
-
-            if (validarNome(nome)) {
-                break;
-            }
-            System.out.println("Nome deve ter no mínimo " + TAMANHO_MINIMO_NOME + " caracteres.");
-        }
-
-        // VALIDAR EMAIL  --------------------
         String email;
-        while (true) {
+        do {
             System.out.print("Email: ");
-            email = scanner.nextLine().trim();
+            email = scanner.nextLine();
 
-            if (validarEmail(email)) {
-                break;
+            if (!email.contains("@")) {
+                System.out.println("Email inválido. Digite novamente.");
             }
-            System.out.println("Email inválido. Use o formato: usuario@dominio.com");
-        }
+        } while (!email.contains("@"));
 
-        // VALIDAR CPF  --------------------
         String cpf;
-        while (true) {
-            System.out.print("CPF (somente números): ");
-            cpf = scanner.nextLine().trim();
+        do {
+            System.out.print("CPF: ");
+            cpf = scanner.nextLine();
 
-            if (validarCPF(cpf)) {
-                break;
+            if (cpf.length() != 11) {
+                System.out.println("CPF inválido. Digite novamente.");
             }
-            System.out.println("CPF inválido (deve conter 11 dígitos).");
-        }
+        } while (cpf.length() != 11);
 
-        // VALIDAR TELEFONE  --------------------
-        String telefone;
-        while (true) {
-            System.out.print("Telefone (formato: (XX) XXXXX-XXXX): ");
-            telefone = scanner.nextLine().trim();
-
-            if (validarTelefone(telefone)) {
-                break;
-            }
-            System.out.println("Formato inválido. Use: (XX) XXXXX-XXXX (ex: (11) 98765-4321)");
-        }
-
-        // VALIDAR SENHA  --------------------
         String senha;
-        while (true) {
-            System.out.print("Crie uma senha (mínimo " + TAMANHO_MINIMO_SENHA + " caracteres): ");
-            senha = scanner.nextLine();
-
-            if (validarSenha(senha)) {
-                break;
-            }
-            System.out.println("Senha deve ter no mínimo " + TAMANHO_MINIMO_SENHA + " caracteres.");
-        }
-
-        usuarioLogado = new Usuario(1, nome, email, cpf, senha, telefone);
-        carteiraAtual = new Carteira(1, usuarioLogado.getId());
-
-        usuarioLogado.cadastrar();
-        System.out.println("Cadastro realizado com sucesso! Você já está logado.");
-    }
-
-    /**
-     * Realiza o login do usuário com validações
-     * Valida: email (formato) e senha (tamanho mínimo)
-     */
-    private void realizarLogin() {
-        System.out.println("\n--- LOGIN ---");
-
-        // VALIDAR EMAIL  --------------------
-        String email;
-        while (true) {
-            System.out.print("Email: ");
-            email = scanner.nextLine().trim();
-
-            if (validarEmail(email)) {
-                break;
-            }
-            System.out.println("Email inválido. Use o formato: usuario@dominio.com");
-        }
-
-        // VALIDAR SENHA  --------------------
-        String senha;
-        while (true) {
+        do {
             System.out.print("Senha: ");
             senha = scanner.nextLine();
 
-            if (validarSenha(senha)) {
-                break;
+            if (senha.length() < 6) {
+                System.out.println("A senha deve ter pelo menos 6 caracteres. Digite novamente.");
             }
-            System.out.println("Senha deve ter no mínimo " + TAMANHO_MINIMO_SENHA + " caracteres.");
+        } while (senha.length() < 6);
+
+        String telefone;
+        do {
+            System.out.print("Telefone: ");
+            telefone = scanner.nextLine();
+
+            if (telefone.length() != 11) {
+                System.out.println("Telefone inválido. Digite novamente.");
+            }
+        } while (telefone.length() != 11);
+
+        for (Usuario usuario : usuariosCadastrados) {
+            if (usuario.getCpf().equals(cpf)) {
+                System.out.println("Já existe um usuário cadastrado com esse CPF.");
+                return;
+            }
+
+            if (usuario.getEmail().equalsIgnoreCase(email)) {
+                System.out.println("Já existe um usuário cadastrado com esse email.");
+                return;
+            }
         }
 
-        usuarioLogado = new Usuario(1, "Usuario", email, "12345678900", senha, "11999999999");
-        carteiraAtual = new Carteira(1, usuarioLogado.getId());
+        Usuario novoUsuario = new Usuario(usuariosCadastrados.size() + 1, nome, email, cpf, senha, telefone);
 
-        usuarioLogado.login();
+        novoUsuario.cadastrar();
+        usuariosCadastrados.add(novoUsuario);
+
+        System.out.println("Cadastro realizado.");
+        System.out.println("Agora faça login para acessar sua conta.");
     }
 
+    private static void fazerLogin() {
+        System.out.println("\n========== LOGIN ==========");
 
-    // MENU PRINCIPAL DO APLICATIVO  ---------------
-    /**
-     * Exibe o menu principal com as 7 opções de funcionalidades
-     */
-    private void telaAppPrincipal() {
-        System.out.println("\n--- MENU PRINCIPAL ROTTA ---");
-        System.out.println("1. Ver Desafios Disponíveis");
-        System.out.println("2. Minha Carteira");
-        System.out.println("3. Meu Progresso (Streak e Capi)");
-        System.out.println("4. Enviar Comprovação de Desafio");
-        System.out.println("5. Resgatar Passagem");
-        System.out.println("6. Meu Perfil");
-        System.out.println("7. Logout");
-        System.out.print("Escolha: ");
-
-        int opcao = lerInteiro();
-
-        switch (opcao) {
-            case 1 -> menuDesafios();
-            case 2 -> menuCarteira();
-            case 3 -> menuProgresso();
-            case 4 -> menuEnviarMidia();
-            case 5 -> menuResgate();
-            case 6 -> menuPerfil();
-            case 7 -> logout();
-            default -> System.out.println("Opção inválida.");
-        }
-    }
-
-
-    // MENU DE DESAFIOS  --------------------
-    /**
-     * Exibe desafios disponíveis e permite ao usuário iniciar um desafio
-     * Atualiza streak e nível ao iniciar
-     */
-    private void menuDesafios() {
-        System.out.println("\n--- DESAFIOS DISPONÍVEIS ---\n");
-
-        Parceiro parceiro1 = new Parceiro(1, "Prefeitura Municipal", TipoParceiro.INSTITUICAO_PUBLICA, "00000000000191", true);
-        Desafio desafio1 = new Desafio(1, "Passos no Bairro", FormatoMidia.FOTO, 50, parceiro1, true);
-
-        System.out.println("Desafio encontrado:");
-        desafio1.exibirDesafio();
-
-        Capi capi = new Capi(1);
-        System.out.println();
-        capi.exibirNaTela();
-        capi.sugerirDica("desafio");
-
-        System.out.print("\nVocê deseja iniciar este desafio? (s/n) ");
-        String resposta = scanner.nextLine();
-
-        if (resposta.equalsIgnoreCase("s")) {
-            ParticipacaoDesafio participacao = new ParticipacaoDesafio(1, usuarioLogado, desafio1);
-            participacao.iniciar();
-
-            Streak streak = new Streak(1, usuarioLogado);
-            streak.atualizarStreak();
-
-            Nivel nivel = new Nivel(1, "Iniciante", 1);
-            nivel.verificarNivelAtual(streak.getDiasConsecutivos());
-
-            Avatar avatar = new Avatar(1, "Capi em sua forma natural", nivel);
-            avatar.exibirAvatar();
-        }
-    }
-
-
-    // MENU DE CARTEIRA  --------------------
-    /**
-     * Exibe saldo da carteira digital e informações do Rotta Card (NFC)
-     */
-    private void menuCarteira() {
-        System.out.println("\n--- MINHA CARTEIRA DIGITAL ---\n");
-
-        System.out.println("Titular: " + usuarioLogado.getNome());
-        carteiraAtual.consultarSaldo();
-
-        RottaCard cartao = new RottaCard(1, "NFC-0001-ROTTA", carteiraAtual);
-        String codigoCartao = cartao.identificar();
-        System.out.println("Seu Rotta Card: " + codigoCartao);
-        System.out.println("Status: " + (cartao.isAtivo() ? "Ativo e pronto para usar" : "Inativo"));
-
-        System.out.println("\nO que deseja fazer?");
-        System.out.println("1. Ver extrato completo");
-        System.out.println("2. Voltar ao menu");
-        System.out.print("Escolha: ");
-
-        int opcao = scanner.nextInt();
-        scanner.nextLine();
-
-        if (opcao == 1) {
-            System.out.println("\n--- EXTRATO ---");
-            System.out.println("Data: " + LocalDateTime.now());
-            System.out.println("Saldo Disponível: " + carteiraAtual.getSaldoPontos() + " pontos");
-            System.out.println("Status: Ativo");
-        }
-    }
-
-
-    // MENU DE PROGRESSO (STREAK E CAPI)  --------------------
-    /**
-     * Exibe o progresso do usuário: dias consecutivos, nível e avatar (Capi)
-     */
-    private void menuProgresso() {
-        System.out.println("\n--- MEU PROGRESSO ---\n");
-
-        Streak streak = new Streak(1, usuarioLogado);
-        System.out.println("Verificando sua sequência...");
-        streak.atualizarStreak();
-        streak.verificarQuebrarStreak();
-
-        int dias = streak.getDiasConsecutivos();
-        System.out.println("\nDias consecutivos: " + dias);
-
-        String nomeNivel = obterNomeNivel(dias);
-        String descricaoAvatar = obterDescricaoAvatar(dias);
-
-        Nivel nivel = new Nivel(dias, nomeNivel, dias);
-        nivel.verificarNivelAtual(dias);
-
-        Avatar avatar = new Avatar(1, descricaoAvatar, nivel);
-        System.out.println();
-        avatar.exibirAvatar();
-
-        Capi capi = new Capi(1);
-        capi.exibirNaTela();
-        capi.sugerirDica("streak");
-    }
-
-
-    // MENU DE COMPROVAÇÃO DE DESAFIO  --------------------
-    /**
-     * Permite ao usuário enviar foto/vídeo como comprovação de desafio
-     * Simula validação por IA, armazenamento offline se sem internet,
-     * e creditação automática de pontos se aprovado
-     */
-    private void menuEnviarMidia() {
-        System.out.println("\n--- ENVIAR COMPROVAÇÃO ---\n");
-
-        Parceiro parceiro = new Parceiro(1, "Prefeitura Municipal", TipoParceiro.INSTITUICAO_PUBLICA, "00000000000191", true);
-        Desafio desafio = new Desafio(1, "Passos no Bairro", FormatoMidia.FOTO, 50, parceiro, true);
-        ParticipacaoDesafio participacao = new ParticipacaoDesafio(1, usuarioLogado, desafio);
-
-        System.out.print("Digite o nome do arquivo (ex: foto_parque.jpg): ");
-        String nomeArquivo = scanner.nextLine();
-
-        System.out.print("Digite a localização (ex: Parque Villa-Lobos): ");
-        String localizacao = scanner.nextLine();
-
-        PostagemFoto foto = new PostagemFoto(1, nomeArquivo, usuarioLogado, participacao, localizacao);
-
-        System.out.println("\nVerificando conexão com internet...");
-        System.out.print("Você está em área com internet? (s/n) ");
-        String internet = scanner.nextLine();
-
-        if (internet.equalsIgnoreCase("n")) {
-            System.out.println("\nSem internet detectada!");
-            ArmazenamentoOffline armazem = new ArmazenamentoOffline();
-            armazem.salvarTemporariamente(foto);
-            System.out.println("\n(Simulando reconexão...)");
-            System.out.println("Internet reestabelecida!");
-            armazem.sincronizar();
-        }
-
-        foto.enviar();
-
-        System.out.println("\nSubmetendo para validação...");
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ValidacaoIA validacao = new ValidacaoIA(1);
-        validacao.analisarMidia(foto);
-
-        if (validacao.foiAprovado()) {
-            System.out.println("\nParabéns! Sua comprovação foi aprovada!");
-
-            Pontuacao pontuacao = new Pontuacao(1, validacao);
-            pontuacao.executar();
-
-            CreditoPontos credito = new CreditoPontos(pontuacao, carteiraAtual);
-            credito.executar();
-
-            participacao.concluir();
-        } else {
-            System.out.println("\nInfelizmente sua comprovação foi rejeitada.");
-            System.out.println("Tente novamente com uma imagem mais clara.");
-            participacao.cancelar();
-        }
-    }
-
-
-    // MENU DE RESGATE DE PASSAGEM  --------------------
-    /**
-     * Permite ao usuário resgatar passagem usando pontos acumulados
-     * Oferece dois métodos: Rotta Card (NFC) ou QR Code
-     */
-    private void menuResgate() {
-        System.out.println("\n--- RESGATAR PASSAGEM ---\n");
-
-        System.out.println("Saldo disponível:");
-        double saldo = carteiraAtual.consultarSaldo();
-
-        if (saldo < 1) {
-            System.out.println("\nVocê não tem pontos suficientes para resgatar uma passagem.");
-            System.out.println("Complete mais desafios para ganhar pontos!");
+        if (usuarioLogado != null) {
+            System.out.println("Você já está logado como " + usuarioLogado.getNome() + ".");
             return;
         }
 
-        System.out.print("\nDeseja resgatar uma passagem? (s/n) ");
-        String resposta = scanner.nextLine();
+        if (usuariosCadastrados.isEmpty()) {
+            System.out.println("Nenhum usuário cadastrado.");
+            System.out.println("Faça o cadastro primeiro.");
+            return;
+        }
 
-        if (resposta.equalsIgnoreCase("s")) {
-            Resgate resgate = new Resgate(1, 1.0, 1, carteiraAtual);
-            resgate.executar();
+        System.out.print("CPF: ");
+        String cpf = scanner.nextLine();
 
-            System.out.println("\nEscolha como deseja usar sua passagem:");
-            System.out.println("1. Rotta Card (aproximar no validador)");
-            System.out.println("2. QR Code (exibir no celular)");
-            System.out.print("Escolha: ");
+        System.out.print("Senha: ");
+        String senha = scanner.nextLine();
 
-            int metodo = scanner.nextInt();
-            scanner.nextLine();
+        Usuario usuarioEncontrado = null;
 
-            LiberacaoCatraca liberacao = new LiberacaoCatraca(1);
-            RottaCard cartao = new RottaCard(1, "NFC-0001-ROTTA", carteiraAtual);
-
-            if (metodo == 1) {
-                liberacao.liberarViaNFC(cartao);
-            } else if (metodo == 2) {
-                liberacao.liberarViaQRCode(resgate);
+        for (Usuario usuario : usuariosCadastrados) {
+            if (usuario.getCpf().equals(cpf)) {
+                usuarioEncontrado = usuario;
+                break;
             }
         }
-    }
 
-
-    // MENU DE PERFIL  --------------------
-    /**
-     * Exibe informações do usuário (nome, email, CPF, telefone, data de cadastro)
-     * Permite atualizar email e telefone
-     */
-    private void menuPerfil() {
-        System.out.println("\n--- MEU PERFIL ---\n");
-
-        System.out.println("Nome: " + usuarioLogado.getNome());
-        System.out.println("Email: " + usuarioLogado.getEmail());
-        System.out.println("CPF: " + usuarioLogado.getCpf());
-        System.out.println("Telefone: " + usuarioLogado.getTelefone());
-        System.out.println("Data de Cadastro: " + usuarioLogado.getDataCadastro().toLocalDate());
-        System.out.println("Status: " + (usuarioLogado.isAtivo() ? "Ativo" : "Inativo"));
-
-        System.out.println("\nO que deseja fazer?");
-        System.out.println("1. Atualizar dados");
-        System.out.println("2. Voltar ao menu");
-        System.out.print("Escolha: ");
-
-        int opcao = scanner.nextInt();
-        scanner.nextLine();
-
-        if (opcao == 1) {
-            System.out.print("Novo email: ");
-            String novoEmail = scanner.nextLine();
-            System.out.print("Novo telefone: ");
-            String novoTelefone = scanner.nextLine();
-            usuarioLogado.atualizarDados(novoEmail, novoTelefone);
+        if (usuarioEncontrado == null) {
+            System.out.println("CPF não encontrado.");
+            System.out.println("Faça o cadastro primeiro.");
+            return;
         }
+
+        if (!usuarioEncontrado.login(cpf, senha)) {
+            return;
+        }
+
+        usuarioLogado = usuarioEncontrado;
+        carteiraUsuario = new Carteira(usuarioLogado.getId(), 0, LocalDateTime.now(), "Uso exclusivo para transporte público");
+        streakUsuario = new Streak(usuarioLogado.getId(), 0, null);
+        capi = new Capi(1, "Capi", "Iniciante", "Capivara mascote do Rotta");
+        armazenamento = new ArmazenamentoMidia();
+        cartaoUsuario = new RottaCard(usuarioLogado.getId(), "NFC-" + usuarioLogado.getId(), true);
+
+        cartaoUsuario.vincularCartao(carteiraUsuario);
+
+        menuLogado();
     }
 
+    private static void menuLogado() {
+        int opcao;
 
-    // LOGOUT  --------------------
-    /**
-     * Realiza logout do usuário e retorna à tela de autenticação
-     */
-    private void logout() {
-        System.out.println("\nRealizando logout...");
-        System.out.println("Até logo, " + usuarioLogado.getNome() + "!");
-        usuarioLogado = null;
-        carteiraAtual = null;
+        do {
+            System.out.println("\n========== ROTTA ==========");
+            System.out.println("Usuário: " + usuarioLogado.getNome());
+            System.out.println("----------------------------");
+            System.out.println("1 - Ver Capi e Streak");
+            System.out.println("2 - Ver Desafios");
+            System.out.println("3 - Ver Carteira");
+            System.out.println("4 - Resgatar Passagem");
+            System.out.println("5 - Atualizar Dados");
+            System.out.println("6 - Desativar Conta");
+            System.out.println("0 - Logout");
+            System.out.print("Escolha uma opção: ");
+
+            opcao = lerOpcao();
+
+            switch (opcao) {
+                case 1:
+                    System.out.println("\n========== CAPI ==========");
+                    capi.exibirNaTela();
+                    System.out.println(capi.sugerirDica("streak"));
+                    System.out.println("Dias consecutivos (Streak): " + streakUsuario.getDiasConsecutivos());
+                    System.out.println("Nível atual: " + capi.verificarNivel(streakUsuario.getDiasConsecutivos()));
+                    break;
+
+                case 2:
+                    System.out.println("\n========== DESAFIOS ==========");
+
+                    for (Desafio desafio : desafios) {
+                        desafio.exibirDesafio();
+                        System.out.println();
+                    }
+
+                    System.out.print("Digite o número do desafio: ");
+                    int escolhaDesafio = lerOpcao();
+
+                    Desafio desafioEscolhido = null;
+
+                    for (Desafio desafio : desafios) {
+                        if (desafio.getId() == escolhaDesafio) {
+                            desafioEscolhido = desafio;
+                            break;
+                        }
+                    }
+
+                    if (desafioEscolhido == null) {
+                        System.out.println("Desafio não encontrado.");
+                        break;
+                    }
+
+                    participacaoAtual = new ParticipacaoDesafio(escolhaDesafio, usuarioLogado, desafioEscolhido);
+                    participacaoAtual.iniciar();
+
+
+                    System.out.println("\n========== ENVIO DE MÍDIA ==========");
+                    System.out.println("Desafio: " + participacaoAtual.getDesafio().getNome());
+                    System.out.println("A captura e o envio da mídia devem ser realizados pelo aplicativo mobile.");
+                    System.out.println("1 - Enviar nova mídia");
+                    System.out.println("2 - Usar mídia armazenada");
+                    System.out.println("0 - Voltar");
+                    System.out.print("Escolha uma opção: ");
+
+                    int tipoEnvio = lerOpcao();
+
+                    switch (tipoEnvio) {
+                        case 1:
+                            ultimaMidiaEnviada = null;
+
+                            if (participacaoAtual.getDesafio().getTipoFormato() == FormatoMidia.FOTO) {
+                                System.out.print("Nome do arquivo da foto: ");
+                                String nomeFoto = scanner.nextLine();
+
+                                System.out.print("Localização: ");
+                                String localizacao = scanner.nextLine();
+
+                                PostagemFoto foto = new PostagemFoto(1, nomeFoto, usuarioLogado, participacaoAtual, localizacao);
+
+                                if (foto.validarFoto()) {
+                                    foto.comprimirImagem();
+                                    ultimaMidiaEnviada = foto;
+                                }
+                            } else {
+                                System.out.print("Nome do arquivo do vídeo: ");
+                                String nomeVideo = scanner.nextLine();
+
+                                System.out.print("Duração do vídeo em segundos: ");
+                                int duracao = lerOpcao();
+
+                                PostagemVideo video = new PostagemVideo(1, nomeVideo, usuarioLogado, participacaoAtual, duracao, "HD");
+
+                                if (video.validarDuracao()) {
+                                    ultimaMidiaEnviada = video;
+                                }
+                            }
+
+                            if (ultimaMidiaEnviada == null) {
+                                System.out.println("A mídia não pôde ser utilizada.");
+                                break;
+                            }
+
+                            System.out.print("Deseja salvar a mídia no armazenamento? (S/N): ");
+                            String salvar = scanner.nextLine();
+
+                            if (salvar.equalsIgnoreCase("S")) {
+                                armazenamento.salvar(ultimaMidiaEnviada);
+                                System.out.println("Mídia armazenada para uso posterior.");
+                            } else {
+                                ultimaMidiaEnviada.enviar();
+                                validarMidia(ultimaMidiaEnviada);
+                            }
+                            break;
+
+                        case 2:
+                            if (ultimaMidiaEnviada == null) {
+                                System.out.println("Nenhuma mídia salva no armazenamento.");
+                                break;
+                            }
+
+                            armazenamento.listarMidias();
+                            System.out.print("Digite o nome da mídia que deseja utilizar: ");
+                            String nomeMidia = scanner.nextLine();
+
+                            ultimaMidiaEnviada = armazenamento.recuperar(nomeMidia);
+
+                            if (ultimaMidiaEnviada != null) {
+                                System.out.println("Mídia selecionada: " + ultimaMidiaEnviada.getNomeArquivo());
+
+                                if (ultimaMidiaEnviada.getParticipacao() == null || ultimaMidiaEnviada.getParticipacao().getDesafio().getId() != participacaoAtual.getDesafio().getId()) {
+                                    System.out.println("Essa mídia pertence a outro desafio.");
+                                    System.out.println("Selecione uma mídia correspondente ao desafio atual.");
+                                    break;
+                                }
+
+                                if (participacaoAtual.getDesafio().getTipoFormato() == FormatoMidia.VIDEO && !(ultimaMidiaEnviada instanceof PostagemVideo)) {
+                                    System.out.println("Essa mídia não é compatível com o formato deste desafio.");
+                                    break;
+                                }
+
+                                if (participacaoAtual.getDesafio().getTipoFormato() == FormatoMidia.FOTO && !(ultimaMidiaEnviada instanceof PostagemFoto)) {
+                                    System.out.println("Essa mídia não é compatível com o formato deste desafio.");
+                                    break;
+                                }
+
+                                ultimaMidiaEnviada.enviar();
+
+                                if (validarMidia(ultimaMidiaEnviada)) {
+                                    armazenamento.remover(ultimaMidiaEnviada);
+                                }
+                            }
+                            break;
+
+                        case 0:
+                            break;
+
+                        default:
+                            System.out.println("Opção inválida.");
+                            break;
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\n========== CARTEIRA ==========");
+                    System.out.println("Saldo de pontos: " + carteiraUsuario.consultarSaldo());
+                    System.out.println("Tipo de uso: " + carteiraUsuario.getTipoUso());
+                    System.out.println("Rotta Card: " + cartaoUsuario.identificar());
+                    break;
+
+                case 4:
+                    System.out.println("\n========== RESGATE ==========");
+                    System.out.println("Saldo disponível: " + carteiraUsuario.consultarSaldo());
+                    System.out.println("1 passagem = 150 pontos");
+                    System.out.print("Quantidade de pontos para resgatar: ");
+
+                    double pontosResgate;
+
+                    try {
+                        pontosResgate = Double.parseDouble(scanner.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Valor inválido.");
+                        break;
+                    }
+
+                    if (pontosResgate <= 0) {
+                        System.out.println("A quantidade de pontos deve ser maior que zero.");
+                        break;
+                    }
+
+                    if (pontosResgate % PONTOS_POR_PASSAGEM != 0) {
+                        System.out.println("O resgate deve ser um múltiplo de 150 pontos.");
+                        System.out.println("1 passagem = 150 pontos.");
+                        break;
+                    }
+
+                    if (!carteiraUsuario.verificarSaldo(pontosResgate)) {
+                        System.out.println("Saldo insuficiente.");
+                        break;
+                    }
+
+                    int quantidadePassagens = (int) (pontosResgate / PONTOS_POR_PASSAGEM);
+
+                    System.out.println("Você está resgatando " + quantidadePassagens + " passagem(ns).");
+                    System.out.println("\nComo deseja utilizar a passagem?");
+                    System.out.println("1 - Rotta Card (NFC)");
+                    System.out.println("2 - QR Code");
+                    System.out.println("0 - Voltar");
+                    System.out.print("Escolha uma opção: ");
+
+                    int metodo = lerOpcao();
+
+                    switch (metodo) {
+                        case 1:
+                            carteiraUsuario.debitarPontos(pontosResgate);
+
+                            ultimoResgate = new Resgate(1, pontosResgate, null);
+                            ultimoResgate.executar();
+
+                            LiberacaoCatraca liberacaoNFC = new LiberacaoCatraca(1);
+                            liberacaoNFC.liberarViaNFC(cartaoUsuario);
+                            break;
+
+                        case 2:
+                            carteiraUsuario.debitarPontos(pontosResgate);
+
+                            ultimoResgate = new Resgate(1, pontosResgate, null);
+                            ultimoResgate.executar();
+                            ultimoResgate.gerarQRCode();
+
+                            break;
+
+                        case 0:
+                            System.out.println("Resgate cancelado.");
+                            break;
+
+                        default:
+                            System.out.println("Opção inválida.");
+                            break;
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("\n========== ATUALIZAR DADOS ==========");
+                    System.out.print("Novo email: ");
+                    String novoEmail = scanner.nextLine();
+
+                    System.out.print("Nova senha: ");
+                    String novaSenha = scanner.nextLine();
+
+                    usuarioLogado.atualizarDados(novoEmail, novaSenha);
+                    break;
+
+                case 6:
+                    System.out.println("\n========== DESATIVAR CONTA ==========");
+                    System.out.print("Tem certeza que deseja desativar sua conta? (S/N): ");
+
+                    String confirmacao = scanner.nextLine();
+
+                    if (confirmacao.equalsIgnoreCase("S")) {
+                        usuarioLogado.desativarConta();
+                        usuarioLogado = null;
+                    }
+                    break;
+
+                case 0:
+                    System.out.println("Logout realizado.");
+                    usuarioLogado = null;
+                    break;
+
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+
+        } while (opcao != 0 && usuarioLogado != null);
     }
 
+    private static boolean validarMidia(Midia midia) {
+        System.out.println("\n========== VALIDAÇÃO IA ==========");
 
-    // MÉTODOS AUXILIARES  --------------------
-    /**
-     * Obtém o nome do nível baseado em dias consecutivos
-     * Níveis: Iniciante, Comprometido, Inspirador, Transformador, Catalisador
-     */
-    private String obterNomeNivel(int diasConsecutivos) {
-        if (diasConsecutivos >= 30) return "Catalisador - Lenda da Mobilidade";
-        if (diasConsecutivos >= 15) return "Transformador";
-        if (diasConsecutivos >= 7) return "Inspirador";
-        if (diasConsecutivos >= 3) return "Comprometido";
-        return "Iniciante";
+        ValidacaoIA validacao = new ValidacaoIA(1, 0.0, ResultadoValidacao.REPROVADO, "Aguardando análise.");
+
+        validacao.analisarMidia(midia, participacaoAtual.getDesafio());
+        validacao.exibirResultado();
+
+        if (validacao.foiAprovado()) {
+            Pontuacao pontuacao = new Pontuacao(1, participacaoAtual.getDesafio().getPontosDesafio());
+            double pontos = pontuacao.calcularPontos();
+
+            streakUsuario.atualizarStreak();
+            participacaoAtual.concluir();
+            carteiraUsuario.creditarPontos(pontos);
+
+            return true;
+        }
+
+        participacaoAtual.cancelar();
+        System.out.println("A mídia não foi aprovada. Nenhum ponto foi recebido.");
+        return false;
     }
 
-    /**
-     * Obtém a descrição visual do avatar (Capi) baseado em dias consecutivos
-     * Descreve roupas, acessórios e aura da Capi conforme nível progride
-     */
-    private String obterDescricaoAvatar(int diasConsecutivos) {
-        if (diasConsecutivos >= 30) return "Capi com óculos futuristas de tecnologia (HUD), fones de ouvido e coroa dourada - cercada por uma energia vibrante";
-        if (diasConsecutivos >= 15) return "Capi com aura roxa brilhante - transformando ativamente a rotina e infraestrutura da cidade";
-        if (diasConsecutivos >= 7) return "Capi com mochila verde de sustentabilidade e elementos visuais de folhas - um exemplo que movimenta pessoas";
-        if (diasConsecutivos >= 3) return "Capi com moletom oficial da Rotta - simbolizando que você entrou na rota e está criando constância";
-        return "Capi em sua forma natural e amigável - marcando seu primeiro passo em direção às atitudes sustentáveis";
-    }
-
-
-    // MÉTODOS DE VALIDAÇÃO DE ENTRADA (SEGURANÇA)  -----------
-    /**
-     * Lê um inteiro da entrada do usuário com tratamento de exceção
-     * Se a entrada não for um número válido, retorna -1
-     * @return inteiro lido ou -1 se inválido
-     */
-    private int lerInteiro() {
+    private static int lerOpcao() {
         try {
-            int valor = scanner.nextInt();
-            scanner.nextLine();
-            return valor;
-        } catch (Exception e) {
-            scanner.nextLine();
-            System.out.println("Entrada inválida. Digite um número.");
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
             return -1;
         }
-    }
-
-    /**
-     * Valida se o nome tem tamanho mínimo de 3 caracteres
-     * @param nome Nome a ser validado
-     * @return true se válido, false caso contrário
-     */
-    private boolean validarNome(String nome) {
-        return nome != null && nome.length() >= TAMANHO_MINIMO_NOME;
-    }
-
-    /**
-     * Valida se o email está em formato correto usando regex
-     * Padrão: usuario@dominio.extensão
-     * @param email Email a ser validado
-     * @return true se válido, false caso contrário
-     */
-    private boolean validarEmail(String email) {
-        if (email == null || email.isEmpty()) {
-            return false;
-        }
-        Pattern pattern = Pattern.compile(REGEX_EMAIL);
-        return pattern.matcher(email).matches();
-    }
-
-    /**
-     * Valida se o CPF contém exatamente 11 dígitos numéricos
-     * Remove não-dígitos e valida o tamanho resultante
-     * @param cpf CPF a ser validado (pode conter formatação)
-     * @return true se contiver 11 dígitos, false caso contrário
-     */
-    private boolean validarCPF(String cpf) {
-        if (cpf == null || cpf.isEmpty()) {
-            return false;
-        }
-        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
-        return cpfLimpo.length() == TAMANHO_CPF;
-    }
-
-    /**
-     * Valida se o telefone está no formato brasileiro: (XX) XXXXX-XXXX
-     * Aceita 9 ou 10 dígitos após o DDD
-     * @param telefone Telefone a ser validado
-     * @return true se válido, false caso contrário
-     */
-    private boolean validarTelefone(String telefone) {
-        if (telefone == null || telefone.isEmpty()) {
-            return false;
-        }
-        Pattern pattern = Pattern.compile(REGEX_TELEFONE);
-        return pattern.matcher(telefone).matches();
-    }
-
-    /**
-     * Valida se a senha tem tamanho mínimo de 6 caracteres
-     * @param senha Senha a ser validada
-     * @return true se válido, false caso contrário
-     */
-    private boolean validarSenha(String senha) {
-        return senha != null && senha.length() >= TAMANHO_MINIMO_SENHA;
     }
 }

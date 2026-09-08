@@ -1,9 +1,8 @@
 package br.com.rotta.enums;
 
+// Resultado da tentativa de liberar a catraca
 public enum StatusLiberacao {
-
-    // Liberação de mídia
-    VALIDADA, // Liberação validada
-    NEGADA, // Liberação negada
-    CANCELADA // Liberação cancelada
+    VALIDADA,
+    NEGADA,
+    CANCELADA
 }

@@ -1,12 +1,9 @@
 package br.com.rotta.models;
 
 import br.com.rotta.enums.StatusParticipacao;
-
 import java.time.LocalDateTime;
 
 public class ParticipacaoDesafio {
-
-    //ATRIBUTOS
     private int id;
     private LocalDateTime dataInicio;
     private LocalDateTime dataConclusao;
@@ -14,36 +11,51 @@ public class ParticipacaoDesafio {
     private Usuario usuario;
     private Desafio desafio;
 
-    //CONSTRUTOR
     public ParticipacaoDesafio(int id, Usuario usuario, Desafio desafio) {
         this.id = id;
         this.usuario = usuario;
         this.desafio = desafio;
-        this.dataInicio = LocalDateTime.now();
         this.status = StatusParticipacao.EM_ANDAMENTO;
     }
 
-    //MÉTODOS
     public void iniciar() {
-        this.status = StatusParticipacao.EM_ANDAMENTO;
-        this.dataInicio = LocalDateTime.now();
-        System.out.println(usuario.getNome() + " começou o desafio \"" + desafio.getNome() + "\"! Boa sorte!");
+        dataInicio = LocalDateTime.now();
+        status = StatusParticipacao.EM_ANDAMENTO;
+        System.out.println("Desafio iniciado: " + desafio.getNome());
     }
 
     public void concluir() {
-        this.status = StatusParticipacao.CONCLUIDA;
-        this.dataConclusao = LocalDateTime.now();
-        System.out.println("Desafio \"" + desafio.getNome() + "\" concluído por " + usuario.getNome() + "!");
+        dataConclusao = LocalDateTime.now();
+        status = StatusParticipacao.CONCLUIDA;
+        System.out.println("Participação concluída com sucesso.");
     }
 
     public void cancelar() {
-        this.status = StatusParticipacao.CANCELADA;
-        System.out.println("Desafio \"" + desafio.getNome() + "\" foi cancelado.");
+        status = StatusParticipacao.CANCELADA;
+        System.out.println("Participação cancelada.");
     }
 
-    //GETTERS
-    public int getId() { return id; }
-    public Usuario getUsuario() { return usuario; }
-    public Desafio getDesafio() { return desafio; }
-    public StatusParticipacao getStatus() { return status; }
+    public int getId() {
+        return id;
+    }
+
+    public LocalDateTime getDataInicio() {
+        return dataInicio;
+    }
+
+    public LocalDateTime getDataConclusao() {
+        return dataConclusao;
+    }
+
+    public StatusParticipacao getStatus() {
+        return status;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public Desafio getDesafio() {
+        return desafio;
+    }
 }

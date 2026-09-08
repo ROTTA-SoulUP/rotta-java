@@ -1,6 +1,6 @@
 package br.com.rotta.models;
 
-import br.com.rotta.enums.*;
+import br.com.rotta.enums.FormatoMidia;
 
 public class Desafio {
     private int id;
@@ -8,29 +8,26 @@ public class Desafio {
     private FormatoMidia tipoFormato;
     private int tempoMaxVideo;
     private int pontosDesafio;
-    private boolean ativo;
-    private Parceiro parceiro;
 
-    //CONSTRUTOR
-
-    public Desafio(int id, String nome, FormatoMidia tipoFormato, int pontosDesafio, Parceiro parceiro, boolean ativo) {
+    public Desafio(int id, String nome, FormatoMidia tipoFormato, int tempoMaxVideo, int pontosDesafio) {
         this.id = id;
         this.nome = nome;
         this.tipoFormato = tipoFormato;
+        this.tempoMaxVideo = tempoMaxVideo;
         this.pontosDesafio = pontosDesafio;
-        this.parceiro = parceiro;
-        this.ativo = true;
     }
 
-    //MÉTODOS
     public void exibirDesafio() {
         System.out.println("Desafio: " + nome);
-        System.out.println("Formato exigido: " + tipoFormato);
-        System.out.println("Recompensa: " + pontosDesafio + " pontos");
-        System.out.println("Patrocinado por: " + parceiro.getNome());
+        System.out.println("Formato: " + tipoFormato);
+
+        if (tipoFormato == FormatoMidia.VIDEO) {
+            System.out.println("Tempo máximo do vídeo: " + tempoMaxVideo + " segundos");
+        }
+
+        System.out.println("Pontos: " + pontosDesafio);
     }
 
-    //GETTERS
     public int getId() {
         return id;
     }
@@ -39,11 +36,15 @@ public class Desafio {
         return nome;
     }
 
-    public int getPontosDesafio() {
-        return pontosDesafio;
-    }
-
     public FormatoMidia getTipoFormato() {
         return tipoFormato;
+    }
+
+    public int getTempoMaxVideo() {
+        return tempoMaxVideo;
+    }
+
+    public int getPontosDesafio() {
+        return pontosDesafio;
     }
 }

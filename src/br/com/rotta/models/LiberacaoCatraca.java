@@ -1,50 +1,50 @@
 package br.com.rotta.models;
 
+import java.time.LocalDateTime;
 import br.com.rotta.enums.MetodoLiberacao;
 import br.com.rotta.enums.StatusLiberacao;
 
-import java.time.LocalDateTime;
-
 public class LiberacaoCatraca {
 
-    //ATRIBUTOS
     private int id;
     private MetodoLiberacao tipoMetodo;
     private LocalDateTime dataLiberacao;
     private StatusLiberacao status;
 
-    //CONSTRUTOR
     public LiberacaoCatraca(int id) {
         this.id = id;
-        this.dataLiberacao = LocalDateTime.now();
     }
 
-    //MÉTODOS
     public boolean liberarViaNFC(RottaCard cartao) {
         this.tipoMetodo = MetodoLiberacao.NFC;
-        System.out.println("Aproximando o Rotta Card no validador...");
-        if (cartao.isAtivo() && cartao.getCarteira().getSaldoPontos() > 0) {
+        this.dataLiberacao = LocalDateTime.now();
+
+        if (cartao.isAtivo()) {
             this.status = StatusLiberacao.VALIDADA;
-            System.out.println("Catraca liberada via NFC! Boa viagem!");
+            System.out.println("Catraca liberada via NFC! Código: " + cartao.identificar());
             return true;
         }
+
         this.status = StatusLiberacao.NEGADA;
-        System.out.println("Liberacao negada. Verifique seu saldo ou o estado do cartao.");
+        System.out.println("Não foi possível liberar a catraca via NFC.");
         return false;
     }
 
     public boolean liberarViaQRCode(Resgate resgate) {
         this.tipoMetodo = MetodoLiberacao.QRCODE;
-        System.out.println("Lendo o QR Code no validador...");
+        this.dataLiberacao = LocalDateTime.now();
+
         if (resgate.validarQRCode()) {
             this.status = StatusLiberacao.VALIDADA;
-            System.out.println("Catraca liberada via QR Code! Boa viagem!");
+            System.out.println("Catraca liberada via QR Code!");
             return true;
         }
+
         this.status = StatusLiberacao.NEGADA;
+        System.out.println("QR Code inválido ou expirado.");
         return false;
     }
-    //GETTER
+
     public StatusLiberacao getStatus() {
         return status;
     }

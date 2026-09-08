@@ -1,57 +1,48 @@
 package br.com.rotta.models;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import br.com.rotta.enums.StatusMovimentacao;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+public class Resgate extends Movimentacao {
 
-public class Resgate extends Movimentacao { //Herança
-
-    // ATRIBUTOS
     private double pontosUtilizados;
-    private double valorCredito;
     private String codigoQR;
     private LocalDateTime dataExpiracao;
 
-    // CONSTRUTOR
-    public Resgate(int id, double pontosUtilizados, double valorCredito, Carteira carteira) {
-        super(id, pontosUtilizados, carteira);
+    public Resgate(int id, double pontosUtilizados, String codigoQR) {
+        super(id, pontosUtilizados);
         this.pontosUtilizados = pontosUtilizados;
-        this.valorCredito = valorCredito;
+        this.codigoQR = codigoQR;
     }
 
-    // METODOS
     @Override
     public void executar() {
-        System.out.println("Processando resgate de " + pontosUtilizados + " pontos...");
-        getCarteira().debitarPontos(this.pontosUtilizados);
-        gerarQRCode();
-        setStatus(StatusMovimentacao.CONCLUIDA);
-        System.out.println("Resgate concluído! Sua passagem está pronta.");
-        }
+        this.setStatus(StatusMovimentacao.CONCLUIDA);
+    }
 
     public void gerarQRCode() {
-        this.codigoQR = UUID.randomUUID().toString();
-        this.dataExpiracao = LocalDateTime.now().plusHours(24);
+        this.codigoQR = "ROTTA-QR-" + System.currentTimeMillis();
+        this.dataExpiracao = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
+
         System.out.println("QR Code gerado: " + codigoQR);
-        System.out.println("Válido até: " + dataExpiracao);
+        System.out.println("Validade: hoje até " + dataExpiracao.toLocalTime());
     }
 
     public boolean validarQRCode() {
-        boolean valido = !verificarExpiracao();
-        if (valido) {
-            System.out.println("QR Code válido! Catraca liberada.");
-        } else {
-            System.out.println("QR Code expirado. Gere um novo resgate.");
-        }
-        return valido;
+        return this.codigoQR != null && !verificarExpiracao();
     }
 
     public boolean verificarExpiracao() {
-        return LocalDateTime.now().isAfter(this.dataExpiracao);
+        return dataExpiracao == null || LocalDateTime.now().isAfter(dataExpiracao);
     }
 
     public String getCodigoQR() {
         return codigoQR;
+    }
+
+    public LocalDateTime getDataExpiracao() {
+        return dataExpiracao;
     }
 }

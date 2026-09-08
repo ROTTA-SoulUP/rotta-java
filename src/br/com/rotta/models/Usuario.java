@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class Usuario {
 
-    // ATRIBUTOS
     private int id;
     private String nome;
     private String email;
@@ -14,51 +13,48 @@ public class Usuario {
     private LocalDateTime dataCadastro;
     private boolean ativo;
 
-    // CONSTRUTOR
-    public Usuario(int id, String nome, String email, String cpf, String senhaHash, String telefone) {
+    // Cria um usuário e registra automaticamente a data de cadastro.
+    public Usuario(int id, String nome, String email, String cpf,
+                   String senha, String telefone) {
+
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
-        this.senhaHash = senhaHash;
+        this.senhaHash = senha;
         this.telefone = telefone;
         this.dataCadastro = LocalDateTime.now();
-        this.ativo = true; // Sempre começa ativo
+        this.ativo = true;
     }
 
-    // METODOS
+    // Simula o cadastro do usuário.
     public void cadastrar() {
-        System.out.println("Usuário cadastrado!");
-        System.out.println("\nNome: " + nome +
-                            "\nEmail: " + email +
-                            "\nData do cadastro: " + dataCadastro.toLocalDate() +
-                            "\nBem-vindo a Rotta, " + nome + "! Sua jornada sustentável começa agora.");
+        System.out.println("Usuário " + nome + " cadastrado com sucesso.");
     }
 
-    public void login() {
-        if (ativo) {
-            System.out.println("Login realizado. Bem-vindo, " + nome + "!");
-        } else {
-            System.out.println("Nao foi possivel entrar. Sua conta esta desativada, contate o suporte.");
+    // Verifica se a senha informada corresponde à senha cadastrada.
+    public boolean login(String cpf, String senha) {
+        if (ativo && this.cpf.equals(cpf) && senhaHash.equals(senha)) {
+            System.out.println("Login realizado com sucesso. Bem-vindo, " + nome + "!");
+            return true;
         }
+        System.out.println("CPF ou senha inválidos.");
+        return false;
     }
 
-    public void atualizarDados(String novoEmail, String novoTelefone) {
-        String emailAntigo = this.email;
-        String telefoneAntigo = this.telefone;
-        this.email = novoEmail;
-        this.telefone = novoTelefone;
-        System.out.println("Dados atualizados com sucesso!" +
-                            "Email: " + emailAntigo + " - - " + novoEmail +
-                            "Telefone: " + telefoneAntigo + " - - " + novoTelefone);
+    // Atualiza os dados de contato do usuário.
+    public void atualizarDados(String novoEmail, String novaSenha) {
+        email = novoEmail;
+        senhaHash = novaSenha;
+        System.out.println("Dados atualizados com sucesso.");
     }
 
+    // Desativa a conta do usuário.
     public void desativarConta() {
-        this.ativo = false;
-        System.out.println("Poxa, " + nome + "! Sua contra foi desativada. Sentiremos sua falta na Rotta, " + nome + ".");
-    }
+        ativo = false;
 
-    // GETTERS E SETTERS
+        System.out.println("Conta desativada com sucesso.");
+    }
 
     public int getId() {
         return id;
@@ -76,6 +72,10 @@ public class Usuario {
         return cpf;
     }
 
+    public String getSenhaHash() {
+        return senhaHash;
+    }
+
     public String getTelefone() {
         return telefone;
     }
@@ -88,4 +88,3 @@ public class Usuario {
         return ativo;
     }
 }
-

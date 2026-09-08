@@ -1,50 +1,71 @@
 package br.com.rotta.models;
 
+import br.com.rotta.enums.FormatoMidia;
 import br.com.rotta.enums.ResultadoValidacao;
-import java.time.LocalDateTime;
 
 public class ValidacaoIA {
 
-    // ATRIBUTOS
     private int id;
     private double scoreIA;
-    private ResultadoValidacao statusValidacao;
+    private ResultadoValidacao resultado;
     private String observacao;
-    private LocalDateTime dataAnalise;
-    private Midia midia;
 
-    //CONSTRUTOR
-    public ValidacaoIA(int id) {
+    public ValidacaoIA(int id, double scoreIA, ResultadoValidacao resultado, String observacao) {
         this.id = id;
+        this.scoreIA = scoreIA;
+        this.resultado = resultado;
+        this.observacao = observacao;
     }
 
-    //MÉTODOS
-    public void analisarMidia(Midia midia) {
-        this.midia = midia;
-        System.out.println("Analisando autenticidade da midia com Inteligência Artificial...");
-        this.scoreIA = Math.random() * 100;
-        this.dataAnalise = LocalDateTime.now();
-        if (this.scoreIA >= 30) {
-            this.statusValidacao = ResultadoValidacao.APROVADO;
-            this.observacao = "Mídia validada com sucesso.";
-        } else {
-            this.statusValidacao = ResultadoValidacao.REJEITADO;
-            this.observacao = "Não foi possível confirmar a autenticidade da mídia.";
+    public void analisarMidia(Midia midia, Desafio desafio) {
+        if (midia == null || desafio == null) {
+            scoreIA = 0.0;
+            resultado = ResultadoValidacao.REPROVADO;
+            observacao = "Não foi possível analisar a mídia.";
+            return;
         }
-        exibirResultado();
+
+        if (desafio.getTipoFormato() == FormatoMidia.VIDEO && !(midia instanceof PostagemVideo)) {
+            scoreIA = 0.10;
+            resultado = ResultadoValidacao.REPROVADO;
+            observacao = "O desafio exige um vídeo.";
+            return;
+        }
+
+        if (desafio.getTipoFormato() == FormatoMidia.FOTO && !(midia instanceof PostagemFoto)) {
+            scoreIA = 0.10;
+            resultado = ResultadoValidacao.REPROVADO;
+            observacao = "O desafio exige uma foto.";
+            return;
+        }
+
+        scoreIA = 0.95;
+        resultado = ResultadoValidacao.APROVADO;
+        observacao = "Mídia aprovada pela IA.";
     }
 
     public void exibirResultado() {
-        System.out.println("Score obtido: " + String.format("%.2f", scoreIA) + "/100");
-        System.out.println("Resultado: " + statusValidacao);
-        System.out.println("Observacao: " + observacao);
+        System.out.println("Pontuação da IA: " + scoreIA + " / 1.00");
+        System.out.println("Resultado: " + resultado);
     }
 
     public boolean foiAprovado() {
-        return this.statusValidacao == ResultadoValidacao.APROVADO;
+        return resultado == ResultadoValidacao.APROVADO;
     }
 
-    //GETTERS
-    public double getScoreIA() { return scoreIA; }
-    public Midia getMidia() { return midia; }
+    public int getId() {
+        return id;
+    }
+
+    public double getScoreIA() {
+        return scoreIA;
+    }
+
+    public ResultadoValidacao getResultado() {
+        return resultado;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
 }

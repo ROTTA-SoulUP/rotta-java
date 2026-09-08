@@ -1,8 +1,7 @@
 package br.com.rotta.enums;
 
+// Resultado da analise feita pela IA em cima da midia enviada
 public enum ResultadoValidacao {
-
-    // RESULTADOS DA VALIDAÇÃO
-    APROVADO, // Score suficiente para aprovar a validacao
-    REJEITADO // Score insuficiente para aprovar a validacao
+    APROVADO,
+    REPROVADO
 }
