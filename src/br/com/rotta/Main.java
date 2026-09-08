@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import br.com.rotta.dao.UsuarioDAO;
+import java.sql.SQLException;
+
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -123,6 +126,14 @@ public class Main {
         Usuario novoUsuario = new Usuario(usuariosCadastrados.size() + 1, nome, email, cpf, senha, telefone);
 
         novoUsuario.cadastrar();
+
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            usuarioDAO.inserir(novoUsuario);
+        } catch (SQLException e) {
+            System.out.println("(Nao foi possível salvar no banco agora, mas o cadastro na simulação continua)");
+        }
+
         usuariosCadastrados.add(novoUsuario);
 
         System.out.println("Cadastro realizado.");
@@ -430,6 +441,14 @@ public class Main {
                     String novaSenha = scanner.nextLine();
 
                     usuarioLogado.atualizarDados(novoEmail, novaSenha);
+
+                    try {
+                        UsuarioDAO usuarioDAO = new UsuarioDAO();
+                        usuarioDAO.atualizar(usuarioLogado);
+                    } catch (SQLException e) {
+                        System.out.println("(Não foi possível atualizar no banco agora)");
+                    }
+
                     break;
 
                 case 6:

@@ -4,21 +4,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-// Classe responsável por abrir a conexão com o banco de dados MySQL.
-// Os dados abaixo devem ser trocados pelos dados do seu banco
-// (host, nome do banco, usuário e senha).
+// Classe responsavel por abrir a conexao com o banco de dados Oracle.
+// Troque os valores abaixo pelos dados da SUA conexao (os mesmos que
+// voce usou pra conectar no SQL Developer).
 public class ConexaoBanco {
 
-    // ===== ATRIBUTOS (dados de conexão) =====
-    private static final String URL = "jdbc:mysql://localhost:3306/rotta_db";
-    private static final String USUARIO = "root";
-    private static final String SENHA = "root";
+    // ===== ATRIBUTOS (dados de conexao) =====
 
-    // ===== MÉTODOS =====
+    // Formato: jdbc:oracle:thin:@HOST:PORTA:SID  (ou use "/SERVICE_NAME" no lugar de ":SID")
+    // Exemplo FIAP:  jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
+    // Exemplo local: jdbc:oracle:thin:@localhost:1521:XE
+    private static final String URL = "jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL";
 
-    // Abre e devolve uma conexão com o banco.
-    // Quem chamar este método precisa fechar a conexão depois.
-    // Nas classes DAO usamos try-with-resources para fazer isso automaticamente.
+    private static final String USUARIO = "RM571713";
+    private static final String SENHA = "250807";
+
+    // ===== METODOS =====
+
+    // Abre e devolve uma conexao com o banco. Quem chamar esse metodo precisa
+    // fechar a conexao depois (usamos try-with-resources nas classes DAO).
     public static Connection getConexao() throws SQLException {
         return DriverManager.getConnection(URL, USUARIO, SENHA);
     }
