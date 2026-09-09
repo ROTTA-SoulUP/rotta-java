@@ -111,42 +111,35 @@ public class Main {
             }
         } while (telefone.length() != 11);
 
-        for (Usuario usuario : usuariosCadastrados) {
-            if (usuario.getCpf().equals(cpf)) {
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+        try {
+            if (usuarioDAO.buscarPorCpf(cpf) != null) {
                 System.out.println("Já existe um usuário cadastrado com esse CPF.");
                 return;
             }
 
-            if (usuario.getEmail().equalsIgnoreCase(email)) {
+            if (usuarioDAO.buscarPorEmail(email) != null) {
                 System.out.println("Já existe um usuário cadastrado com esse email.");
                 return;
             }
-        }
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        int proximoId;
+            int proximoId = usuarioDAO.buscarProximoId();
 
-        try {
-            proximoId = usuarioDAO.buscarProximoId();
-        } catch (SQLException e) {
-            proximoId = usuariosCadastrados.size() + 1; // se o banco estiver fora do ar, usa a memória mesmo
-        }
+            Usuario novoUsuario = new Usuario(proximoId, nome, email, cpf, senha, telefone);
 
-        Usuario novoUsuario = new Usuario(proximoId, nome, email, cpf, senha, telefone);
-
-        novoUsuario.cadastrar();
-
-        try {
+            novoUsuario.cadastrar();
             usuarioDAO.inserir(novoUsuario);
+
+            usuariosCadastrados.add(novoUsuario);
+
+            System.out.println("Cadastro realizado.");
+            System.out.println("Agora faça login para acessar sua conta.");
+
         } catch (SQLException e) {
-            System.out.println("(Nao foi possível salvar no banco agora, mas o cadastro na simulação continua)");
+            System.out.println("Não foi possível realizar o cadastro no banco.");
             System.out.println("Erro real: " + e.getMessage());
         }
-
-        usuariosCadastrados.add(novoUsuario);
-
-        System.out.println("Cadastro realizado.");
-        System.out.println("Agora faça login para acessar sua conta.");
     }
 
     private static void fazerLogin() {
@@ -157,25 +150,20 @@ public class Main {
             return;
         }
 
-        if (usuariosCadastrados.isEmpty()) {
-            System.out.println("Nenhum usuário cadastrado.");
-            System.out.println("Faça o cadastro primeiro.");
-            return;
-        }
-
         System.out.print("CPF: ");
         String cpf = scanner.nextLine();
 
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
-        Usuario usuarioEncontrado = null;
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        Usuario usuarioEncontrado;
 
-        for (Usuario usuario : usuariosCadastrados) {
-            if (usuario.getCpf().equals(cpf)) {
-                usuarioEncontrado = usuario;
-                break;
-            }
+        try {
+            usuarioEncontrado = usuarioDAO.buscarPorCpf(cpf);
+        } catch (SQLException e) {
+            System.out.println("Não foi possível consultar o usuário no banco.");
+            return;
         }
 
         if (usuarioEncontrado == null) {
@@ -213,6 +201,7 @@ public class Main {
             System.out.println("4 - Resgatar Passagem");
             System.out.println("5 - Atualizar Dados");
             System.out.println("6 - Desativar Conta");
+            System.out.println("7 - Excluir Conta");
             System.out.println("0 - Logout");
             System.out.print("Escolha uma opção: ");
 
@@ -254,7 +243,6 @@ public class Main {
 
                     participacaoAtual = new ParticipacaoDesafio(escolhaDesafio, usuarioLogado, desafioEscolhido);
                     participacaoAtual.iniciar();
-
 
                     System.out.println("\n========== ENVIO DE MÍDIA ==========");
                     System.out.println("Desafio: " + participacaoAtual.getDesafio().getNome());
@@ -455,7 +443,7 @@ public class Main {
                         UsuarioDAO usuarioDAO = new UsuarioDAO();
                         usuarioDAO.atualizar(usuarioLogado);
                     } catch (SQLException e) {
-                        System.out.println("(Não foi possível atualizar no banco agora)");
+                        System.out.println("Não foi possível atualizar no banco agora.");
                         System.out.println("Erro real: " + e.getMessage());
                     }
 
@@ -469,7 +457,37 @@ public class Main {
 
                     if (confirmacao.equalsIgnoreCase("S")) {
                         usuarioLogado.desativarConta();
-                        usuarioLogado = null;
+
+                        try {
+                            UsuarioDAO usuarioDAO = new UsuarioDAO();
+                            usuarioDAO.atualizar(usuarioLogado);
+                            usuarioLogado = null;
+                        } catch (SQLException e) {
+                            System.out.println("Não foi possível atualizar a conta no banco.");
+                            System.out.println("Erro real: " + e.getMessage());
+                        }
+                    }
+                    break;
+
+                case 7:
+                    System.out.println("\n========== EXCLUIR CONTA ==========");
+                    System.out.print("Tem certeza que deseja excluir sua conta permanentemente? (S/N): ");
+
+                    String confirmacaoExclusao = scanner.nextLine();
+
+                    if (confirmacaoExclusao.equalsIgnoreCase("S")) {
+                        try {
+                            UsuarioDAO usuarioDAO = new UsuarioDAO();
+                            usuarioDAO.deletar(usuarioLogado.getId());
+
+                            usuariosCadastrados.removeIf(usuario -> usuario.getId() == usuarioLogado.getId());
+                            usuarioLogado = null;
+
+                            System.out.println("Conta excluída.");
+                        } catch (SQLException e) {
+                            System.out.println("Não foi possível excluir a conta no banco.");
+                            System.out.println("Erro real: " + e.getMessage());
+                        }
                     }
                     break;
 

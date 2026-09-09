@@ -91,4 +91,8 @@ public class Usuario {
     public boolean isAtivo() {
         return ativo;
     }
+
+    public String getSenha() {
+        return senhaHash;
+    }
 }

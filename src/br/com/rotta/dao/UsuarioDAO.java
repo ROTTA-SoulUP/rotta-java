@@ -10,142 +10,147 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-// Camada DAO (Data Access Object): e a classe que conversa diretamente
-// com o banco de dados Oracle.
-//
-//
-// Script SQL usado para criar a tabela (rode no SQL Developer):
-//
-// CREATE TABLE USUARIO (
-//     ID       NUMBER PRIMARY KEY,
-//     NOME     VARCHAR2(100) NOT NULL,
-//     EMAIL    VARCHAR2(100) NOT NULL UNIQUE,
-//     CPF      VARCHAR2(20)  NOT NULL UNIQUE,
-//     SENHA    VARCHAR2(50)  NOT NULL,
-//     TELEFONE VARCHAR2(20),
-//     ATIVO    NUMBER(1) DEFAULT 1 NOT NULL
-// );
-
 public class UsuarioDAO {
 
-    // ===== CREATE =====
-
-    // Insere um novo usuario no banco de dados (o ID ja vem definido no objeto)
+    // CREATE
     public void inserir(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO USUARIO (ID, NOME, EMAIL, CPF, SENHA, TELEFONE, ATIVO) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (ID, NOME, EMAIL, CPF, SENHA, TELEFONE, ATIVO) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
 
-            stmt.setInt(1, usuario.getId());
-            stmt.setString(2, usuario.getNome());
-            stmt.setString(3, usuario.getEmail());
-            stmt.setString(4, usuario.getCpf());
-            stmt.setString(5, usuario.getSenhaHash());
-            stmt.setString(6, usuario.getTelefone());
-            stmt.setInt(7, usuario.isAtivo() ? 1 : 0);
+            comando.setInt(1, usuario.getId());
+            comando.setString(2, usuario.getNome());
+            comando.setString(3, usuario.getEmail());
+            comando.setString(4, usuario.getCpf());
+            comando.setString(5, usuario.getSenha());
+            comando.setString(6, usuario.getTelefone());
+            comando.setInt(7, usuario.isAtivo() ? 1 : 0);
 
-            stmt.executeUpdate();
+            comando.executeUpdate();
+
             System.out.println("Usuário inserido no banco com sucesso.");
         }
     }
 
-    // Descobre qual o proximo ID disponivel, olhando o maior ID já usado no banco
+    // Busca o próximo ID disponível no banco
     public int buscarProximoId() throws SQLException {
         String sql = "SELECT NVL(MAX(ID), 0) + 1 AS PROXIMO_ID FROM USUARIO";
 
         try (Connection conexao = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement comando = conexao.prepareStatement(sql);
+             ResultSet resultado = comando.executeQuery()) {
 
-            if (rs.next()) {
-                return rs.getInt("PROXIMO_ID");
+            if (resultado.next()) {
+                return resultado.getInt("PROXIMO_ID");
             }
-            return 1;
         }
+
+        return 1;
     }
 
-    // ===== READ =====
-
-    // Busca um usuario pelo email (usado no login)
+    // READ - busca por email
     public Usuario buscarPorEmail(String email) throws SQLException {
         String sql = "SELECT * FROM USUARIO WHERE EMAIL = ?";
 
         try (Connection conexao = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
 
-            stmt.setString(1, email);
+            comando.setString(1, email);
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return montarUsuario(rs);
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    return montarUsuario(resultado);
                 }
             }
         }
+
         return null;
     }
 
-    // Lista todos os usuarios cadastrados no banco
+    // READ - busca por CPF
+    public Usuario buscarPorCpf(String cpf) throws SQLException {
+        String sql = "SELECT * FROM USUARIO WHERE CPF = ?";
+
+        try (Connection conexao = ConexaoBanco.getConexao();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setString(1, cpf);
+
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    return montarUsuario(resultado);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    // READ - lista todos os usuários
     public List<Usuario> listarTodos() throws SQLException {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM USUARIO";
 
         try (Connection conexao = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement comando = conexao.prepareStatement(sql);
+             ResultSet resultado = comando.executeQuery()) {
 
-            while (rs.next()) {
-                usuarios.add(montarUsuario(rs));
+            while (resultado.next()) {
+                usuarios.add(montarUsuario(resultado));
             }
         }
+
         return usuarios;
     }
 
-    // ===== UPDATE =====
-
-    // Atualiza email e senha de um usuario ja existente
+    // UPDATE
     public void atualizar(Usuario usuario) throws SQLException {
-        String sql = "UPDATE USUARIO SET EMAIL = ?, SENHA = ? WHERE ID = ?";
+        String sql = "UPDATE USUARIO SET EMAIL = ?, SENHA = ?, TELEFONE = ?, ATIVO = ? WHERE ID = ?";
 
         try (Connection conexao = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
 
-            stmt.setString(1, usuario.getEmail());
-            stmt.setString(2, usuario.getSenhaHash());
-            stmt.setInt(3, usuario.getId());
+            comando.setString(1, usuario.getEmail());
+            comando.setString(2, usuario.getSenha());
+            comando.setString(3, usuario.getTelefone());
+            comando.setInt(4, usuario.isAtivo() ? 1 : 0);
+            comando.setInt(5, usuario.getId());
 
-            stmt.executeUpdate();
-            System.out.println("Usuário atualizado no banco com sucesso!");
+            comando.executeUpdate();
+
+            System.out.println("Usuário atualizado no banco com sucesso.");
         }
     }
 
-    // ===== DELETE =====
-
-    // Remove um usuario do banco pelo id
+    // DELETE
     public void deletar(int id) throws SQLException {
         String sql = "DELETE FROM USUARIO WHERE ID = ?";
 
         try (Connection conexao = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-            System.out.println("Usuário removido do banco com sucesso!");
+            comando.setInt(1, id);
+
+            int linhasAfetadas = comando.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Usuário removido do banco com sucesso.");
+            } else {
+                System.out.println("Usuário não encontrado no banco.");
+            }
         }
     }
 
-    // ===== METODO AUXILIAR =====
-
-    // Transforma uma linha do ResultSet em um objeto Usuario
-    private Usuario montarUsuario(ResultSet rs) throws SQLException {
+    // Converte o resultado do banco em um objeto Usuario
+    private Usuario montarUsuario(ResultSet resultado) throws SQLException {
         return new Usuario(
-                rs.getInt("ID"),
-                rs.getString("NOME"),
-                rs.getString("EMAIL"),
-                rs.getString("CPF"),
-                rs.getString("SENHA"),
-                rs.getString("TELEFONE")
+                resultado.getInt("ID"),
+                resultado.getString("NOME"),
+                resultado.getString("EMAIL"),
+                resultado.getString("CPF"),
+                resultado.getString("SENHA"),
+                resultado.getString("TELEFONE")
         );
     }
 }
