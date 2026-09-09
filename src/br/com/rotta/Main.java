@@ -123,15 +123,24 @@ public class Main {
             }
         }
 
-        Usuario novoUsuario = new Usuario(usuariosCadastrados.size() + 1, nome, email, cpf, senha, telefone);
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        int proximoId;
+
+        try {
+            proximoId = usuarioDAO.buscarProximoId();
+        } catch (SQLException e) {
+            proximoId = usuariosCadastrados.size() + 1; // se o banco estiver fora do ar, usa a memória mesmo
+        }
+
+        Usuario novoUsuario = new Usuario(proximoId, nome, email, cpf, senha, telefone);
 
         novoUsuario.cadastrar();
 
         try {
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
             usuarioDAO.inserir(novoUsuario);
         } catch (SQLException e) {
             System.out.println("(Nao foi possível salvar no banco agora, mas o cadastro na simulação continua)");
+            System.out.println("Erro real: " + e.getMessage());
         }
 
         usuariosCadastrados.add(novoUsuario);
@@ -447,6 +456,7 @@ public class Main {
                         usuarioDAO.atualizar(usuarioLogado);
                     } catch (SQLException e) {
                         System.out.println("(Não foi possível atualizar no banco agora)");
+                        System.out.println("Erro real: " + e.getMessage());
                     }
 
                     break;

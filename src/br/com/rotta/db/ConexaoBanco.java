@@ -19,6 +19,7 @@ public class ConexaoBanco {
     private static final String USUARIO = "RM571713";
     private static final String SENHA = "250807";
 
+
     // ===== METODOS =====
 
     // Abre e devolve uma conexao com o banco. Quem chamar esse metodo precisa
