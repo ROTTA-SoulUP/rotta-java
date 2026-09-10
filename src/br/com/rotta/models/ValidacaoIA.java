@@ -3,13 +3,25 @@ package br.com.rotta.models;
 import br.com.rotta.enums.FormatoMidia;
 import br.com.rotta.enums.ResultadoValidacao;
 
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
 public class ValidacaoIA {
 
+    // ATRIBUTOS
     private int id;
     private double scoreIA;
     private ResultadoValidacao resultado;
     private String observacao;
 
+    // CONSTRUTOR
     public ValidacaoIA(int id, double scoreIA, ResultadoValidacao resultado, String observacao) {
         this.id = id;
         this.scoreIA = scoreIA;
@@ -17,6 +29,11 @@ public class ValidacaoIA {
         this.observacao = observacao;
     }
 
+    // MÉTODOS
+    /**
+     * Simula a análise da mídia pela IA, comparando o formato enviado
+     * com o formato exigido pelo desafio (foto ou vídeo).
+     */
     public void analisarMidia(Midia midia, Desafio desafio) {
         if (midia == null || desafio == null) {
             scoreIA = 0.0;
@@ -44,15 +61,18 @@ public class ValidacaoIA {
         observacao = "Mídia aprovada pela IA.";
     }
 
+    // Exibe a pontuação e o resultado da análise feita pela IA.
     public void exibirResultado() {
         System.out.println("Pontuação da IA: " + scoreIA + " / 1.00");
         System.out.println("Resultado: " + resultado);
     }
 
+    // Retorna verdadeiro caso a mídia tenha sido aprovada pela IA.
     public boolean foiAprovado() {
         return resultado == ResultadoValidacao.APROVADO;
     }
 
+    // GETTERS
     public int getId() {
         return id;
     }

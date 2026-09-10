@@ -1,6 +1,16 @@
 package br.com.rotta.enums;
 
-// Formato de comprovacao exigido pelo desafio
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
+// Formato de comprovação exigido pelo desafio
 public enum FormatoMidia {
     FOTO,
     VIDEO

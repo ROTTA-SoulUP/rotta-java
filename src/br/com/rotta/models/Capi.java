@@ -1,13 +1,25 @@
 package br.com.rotta.models;
 
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
 public class Capi {
 
+    // ATRIBUTOS
     private int id;
     private String nome;
     private String nivel;
     private String descricao;
 
-    // Cria o Capi com o seu nome, nível e descrição visual.
+    // CONSTRUTOR
+    // Cria a Capi com o seu nome, nível e descrição visual.
     public Capi(int id, String nome, String nivel, String descricao) {
         this.id = id;
         this.nome = nome;
@@ -15,6 +27,7 @@ public class Capi {
         this.descricao = descricao;
     }
 
+    // MÉTODOS
     // Exibe as informações atuais do Capi.
     public void exibirNaTela() {
         System.out.println("Mascote: " + nome);
@@ -41,6 +54,7 @@ public class Capi {
         return nivel;
     }
 
+    // GETTERS
     public int getId() {
         return id;
     }

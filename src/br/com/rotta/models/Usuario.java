@@ -2,8 +2,19 @@ package br.com.rotta.models;
 
 import java.time.LocalDateTime;
 
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
 public class Usuario {
 
+    // ATRIBUTOS
     private int id;
     private String nome;
     private String email;
@@ -13,6 +24,7 @@ public class Usuario {
     private LocalDateTime dataCadastro;
     private boolean ativo;
 
+    // CONSTRUTOR
     // Cria um usuário e registra automaticamente a data de cadastro.
     public Usuario(int id, String nome, String email, String cpf,
                    String senha, String telefone) {
@@ -27,12 +39,16 @@ public class Usuario {
         this.ativo = true;
     }
 
+    // MÉTODOS
     // Simula o cadastro do usuário.
     public void cadastrar() {
         System.out.println("Usuário " + nome + " cadastrado com sucesso.");
     }
 
-    // Verifica se a senha informada corresponde à senha cadastrada.
+    /**
+     * Verifica se a senha informada corresponde à senha cadastrada,
+     * e se a conta está ativa antes de permitir o login.
+     */
     public boolean login(String cpf, String senha) {
         if (ativo && this.cpf.equals(cpf) && senhaHash.equals(senha)) {
             System.out.println("Login realizado com sucesso. Bem-vindo, " + nome + "!");
@@ -56,6 +72,7 @@ public class Usuario {
         System.out.println("Conta desativada com sucesso.");
     }
 
+    // GETTERS
     public int getId() {
         return id;
     }

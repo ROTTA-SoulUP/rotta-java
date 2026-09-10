@@ -10,9 +10,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
+// Classe DAO (Data Access Object) responsável por toda a comunicação entre
+// o objeto Usuario e a tabela USUARIO no banco de dados. Implementa o CRUD
+// completo: Create (inserir), Read (buscarPorEmail, buscarPorCpf, listarTodos),
+// Update (atualizar) e Delete (deletar).
 public class UsuarioDAO {
 
     // CREATE
+    // Insere um novo usuário na tabela USUARIO, usando os dados do objeto recebido.
     public void inserir(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO USUARIO (ID, NOME, EMAIL, CPF, SENHA, TELEFONE, ATIVO) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -33,7 +48,8 @@ public class UsuarioDAO {
         }
     }
 
-    // Busca o próximo ID disponível no banco
+    // Busca o próximo ID disponível no banco, somando 1 ao maior ID já cadastrado.
+    // Usado no cadastro pra gerar o ID do novo usuário antes de inserir.
     public int buscarProximoId() throws SQLException {
         String sql = "SELECT NVL(MAX(ID), 0) + 1 AS PROXIMO_ID FROM USUARIO";
 
@@ -50,6 +66,7 @@ public class UsuarioDAO {
     }
 
     // READ - busca por email
+    // Procura um usuário pelo email e retorna o objeto montado, ou null se não encontrar.
     public Usuario buscarPorEmail(String email) throws SQLException {
         String sql = "SELECT * FROM USUARIO WHERE EMAIL = ?";
 
@@ -69,6 +86,8 @@ public class UsuarioDAO {
     }
 
     // READ - busca por CPF
+    // Procura um usuário pelo CPF e retorna o objeto montado, ou null se não encontrar.
+    // Usado tanto no cadastro (verificar duplicidade) quanto no login.
     public Usuario buscarPorCpf(String cpf) throws SQLException {
         String sql = "SELECT * FROM USUARIO WHERE CPF = ?";
 
@@ -88,6 +107,7 @@ public class UsuarioDAO {
     }
 
     // READ - lista todos os usuários
+    // Retorna todos os usuários cadastrados na tabela USUARIO.
     public List<Usuario> listarTodos() throws SQLException {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM USUARIO";
@@ -105,6 +125,8 @@ public class UsuarioDAO {
     }
 
     // UPDATE
+    // Atualiza email, senha, telefone e status ativo do usuário, localizando pelo ID.
+    // Usado tanto na atualização de dados normal quanto na desativação de conta.
     public void atualizar(Usuario usuario) throws SQLException {
         String sql = "UPDATE USUARIO SET EMAIL = ?, SENHA = ?, TELEFONE = ?, ATIVO = ? WHERE ID = ?";
 
@@ -124,6 +146,7 @@ public class UsuarioDAO {
     }
 
     // DELETE
+    // Remove definitivamente o usuário da tabela USUARIO, localizando pelo ID.
     public void deletar(int id) throws SQLException {
         String sql = "DELETE FROM USUARIO WHERE ID = ?";
 
@@ -142,7 +165,9 @@ public class UsuarioDAO {
         }
     }
 
-    // Converte o resultado do banco em um objeto Usuario
+    // Converte o resultado do banco (ResultSet) em um objeto Usuario.
+    // Método auxiliar usado internamente por buscarPorEmail, buscarPorCpf e listarTodos,
+    // pra não repetir esse código de montagem em cada método de busca.
     private Usuario montarUsuario(ResultSet resultado) throws SQLException {
         return new Usuario(
                 resultado.getInt("ID"),

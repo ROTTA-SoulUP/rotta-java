@@ -11,12 +11,24 @@ import java.util.Scanner;
 import br.com.rotta.dao.UsuarioDAO;
 import java.sql.SQLException;
 
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
 public class Main {
 
+    // ATRIBUTOS
     private static final Scanner scanner = new Scanner(System.in);
     private static final List<Usuario> usuariosCadastrados = new ArrayList<>();
     private static final double PONTOS_POR_PASSAGEM = 150.0;
 
+    // Guarda o estado do usuário logado no momento, usado pelos menus depois do login.
     private static Usuario usuarioLogado;
     private static Carteira carteiraUsuario;
     private static Streak streakUsuario;
@@ -27,6 +39,7 @@ public class Main {
     private static RottaCard cartaoUsuario;
     private static Resgate ultimoResgate;
 
+    // Lista fixa de desafios disponíveis no app, usada no menu de desafios.
     private static final Desafio[] desafios = {
             new Desafio(1, "1 - Caminhada no Parque", FormatoMidia.VIDEO, 30, 60),
             new Desafio(2, "2 - Descarte Inteligente", FormatoMidia.FOTO, 0, 50),
@@ -34,6 +47,8 @@ public class Main {
             new Desafio(4, "4 - Evitando Sacolas Plásticas", FormatoMidia.FOTO, 0, 30)
     };
 
+    // MÉTODO PRINCIPAL
+    // Exibe o menu inicial (cadastro, login ou sair) até o usuário escolher sair.
     public static void main(String[] args) {
         int opcao;
 
@@ -65,6 +80,11 @@ public class Main {
         scanner.close();
     }
 
+    // MÉTODOS
+    /**
+     * Coleta e valida os dados do novo usuário (email, CPF, senha e telefone),
+     * verifica duplicidade no banco e insere o novo cadastro.
+     */
     private static void cadastrarUsuario() {
         System.out.println("\n========== CADASTRO ==========");
 
@@ -114,6 +134,7 @@ public class Main {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         try {
+            // Verifica no banco se já existe usuário com o mesmo CPF ou email antes de inserir.
             if (usuarioDAO.buscarPorCpf(cpf) != null) {
                 System.out.println("Já existe um usuário cadastrado com esse CPF.");
                 return;
@@ -142,6 +163,10 @@ public class Main {
         }
     }
 
+    /**
+     * Autentica o usuário pelo CPF e senha, busca os dados no banco e,
+     * se o login for válido, inicializa a carteira, a streak, o cartão e o Capi.
+     */
     private static void fazerLogin() {
         System.out.println("\n========== LOGIN ==========");
 
@@ -188,6 +213,10 @@ public class Main {
         menuLogado();
     }
 
+    /**
+     * Menu principal exibido após o login, com acesso ao Capi/Streak, desafios,
+     * carteira, resgate de passagem e gerenciamento da conta.
+     */
     private static void menuLogado() {
         int opcao;
 
@@ -209,6 +238,7 @@ public class Main {
 
             switch (opcao) {
                 case 1:
+                    // Mostra o mascote Capi, sua dica atual, e o progresso de streak do usuário.
                     System.out.println("\n========== CAPI ==========");
                     capi.exibirNaTela();
                     System.out.println(capi.sugerirDica("streak"));
@@ -217,6 +247,7 @@ public class Main {
                     break;
 
                 case 2:
+                    // Lista os desafios disponíveis e inicia a participação no desafio escolhido.
                     System.out.println("\n========== DESAFIOS ==========");
 
                     for (Desafio desafio : desafios) {
@@ -256,6 +287,7 @@ public class Main {
 
                     switch (tipoEnvio) {
                         case 1:
+                            // Cria a mídia (foto ou vídeo) de acordo com o formato exigido pelo desafio.
                             ultimaMidiaEnviada = null;
 
                             if (participacaoAtual.getDesafio().getTipoFormato() == FormatoMidia.FOTO) {
@@ -290,6 +322,8 @@ public class Main {
                                 break;
                             }
 
+                            // Simula a galeria offline: o usuário pode salvar a mídia para enviar depois,
+                            // ou enviar e validar imediatamente.
                             System.out.print("Deseja salvar a mídia no armazenamento? (S/N): ");
                             String salvar = scanner.nextLine();
 
@@ -303,6 +337,8 @@ public class Main {
                             break;
 
                         case 2:
+                            // Recupera uma mídia previamente salva no armazenamento offline e valida
+                            // se ela é compatível com o desafio atual antes de enviar.
                             if (ultimaMidiaEnviada == null) {
                                 System.out.println("Nenhuma mídia salva no armazenamento.");
                                 break;
@@ -351,6 +387,7 @@ public class Main {
                     break;
 
                 case 3:
+                    // Exibe o saldo da carteira, o tipo de uso exclusivo e o código do Rotta Card.
                     System.out.println("\n========== CARTEIRA ==========");
                     System.out.println("Saldo de pontos: " + carteiraUsuario.consultarSaldo());
                     System.out.println("Tipo de uso: " + carteiraUsuario.getTipoUso());
@@ -358,6 +395,8 @@ public class Main {
                     break;
 
                 case 4:
+                    // Permite resgatar passagens em múltiplos de 150 pontos, escolhendo entre
+                    // liberação via NFC (Rotta Card) ou geração de QR Code.
                     System.out.println("\n========== RESGATE ==========");
                     System.out.println("Saldo disponível: " + carteiraUsuario.consultarSaldo());
                     System.out.println("1 passagem = 150 pontos");
@@ -430,6 +469,7 @@ public class Main {
                     break;
 
                 case 5:
+                    // Atualiza email e senha do usuário logado, tanto no objeto em memória quanto no banco.
                     System.out.println("\n========== ATUALIZAR DADOS ==========");
                     System.out.print("Novo email: ");
                     String novoEmail = scanner.nextLine();
@@ -450,6 +490,7 @@ public class Main {
                     break;
 
                 case 6:
+                    // Desativa a conta (soft delete), mantendo o registro no banco, mas marcando como inativa.
                     System.out.println("\n========== DESATIVAR CONTA ==========");
                     System.out.print("Tem certeza que deseja desativar sua conta? (S/N): ");
 
@@ -470,6 +511,7 @@ public class Main {
                     break;
 
                 case 7:
+                    // Exclui a conta permanentemente do banco de dados (DELETE real).
                     System.out.println("\n========== EXCLUIR CONTA ==========");
                     System.out.print("Tem certeza que deseja excluir sua conta permanentemente? (S/N): ");
 
@@ -504,6 +546,10 @@ public class Main {
         } while (opcao != 0 && usuarioLogado != null);
     }
 
+    /**
+     * Executa a validação da mídia pela IA e, se aprovada, atualiza a streak,
+     * conclui a participação no desafio e credita os pontos na carteira.
+     */
     private static boolean validarMidia(Midia midia) {
         System.out.println("\n========== VALIDAÇÃO IA ==========");
 
@@ -528,6 +574,7 @@ public class Main {
         return false;
     }
 
+    // Lê a opção digitada e trata entrada inválida, retornando -1 em caso de erro.
     private static int lerOpcao() {
         try {
             return Integer.parseInt(scanner.nextLine());

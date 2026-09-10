@@ -2,13 +2,25 @@ package br.com.rotta.models;
 
 import java.time.LocalDateTime;
 
+/**
+ * Grupo de Desenvolvimento do Projeto.
+ *
+ * @author Guilherme Almeida (RM: 571713)
+ * @author Leonardo Arnaldo (RM: 573188)
+ * @author Thiago Santa Rosa (RM: 572616)
+ * @author Geovanna Secchi Egea (RM: 573452)
+ * @author Beatriz Urbano M. de Oliveira (RM: 569341)
+ */
+
 public class Carteira {
 
+    // ATRIBUTOS
     private int id;
     private double saldoPontos;
     private LocalDateTime ultimaAtualizacao;
     private String tipoUso;
 
+    // CONSTRUTOR
     // Cria a carteira com o seu saldo inicial e define quando ela foi atualizada.
     public Carteira(int id, double saldoPontos,
                     LocalDateTime ultimaAtualizacao, String tipoUso) {
@@ -24,6 +36,7 @@ public class Carteira {
         }
     }
 
+    // MÉTODOS
     // Adiciona pontos ao saldo da carteira.
     public void creditarPontos(double pontos) {
         saldoPontos += pontos;
@@ -56,6 +69,7 @@ public class Carteira {
         return saldoPontos >= pontos;
     }
 
+    // GETTERS
     public int getId() {
         return id;
     }
