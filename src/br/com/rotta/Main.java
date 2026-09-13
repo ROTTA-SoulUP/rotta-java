@@ -47,7 +47,7 @@ public class Main {
             new Desafio(4, "4 - Evitando Sacolas Plásticas", FormatoMidia.FOTO, 0, 30)
     };
 
-    // MÉTODO PRINCIPAL
+    // METODO PRINCIPAL
     /**
      * Inicia a execução do sistema Rotta e apresenta o menu inicial.
      *
@@ -491,27 +491,6 @@ public class Main {
                     break;
 
                 case 6:
-                    // Desativa a conta (soft delete), mantendo o registro no banco, mas marcando como inativa.
-                    System.out.println("\n========== DESATIVAR CONTA ==========");
-                    System.out.print("Tem certeza que deseja desativar sua conta? (S/N): ");
-
-                    String confirmacao = scanner.nextLine();
-
-                    if (confirmacao.equalsIgnoreCase("S")) {
-                        usuarioLogado.desativarConta();
-
-                        try {
-                            UsuarioDAO usuarioDAO = new UsuarioDAO();
-                            usuarioDAO.atualizar(usuarioLogado);
-                            usuarioLogado = null;
-                        } catch (SQLException e) {
-                            System.out.println("Não foi possível atualizar a conta no banco.");
-                            System.out.println("Erro real: " + e.getMessage());
-                        }
-                    }
-                    break;
-
-                case 7:
                     // Exclui a conta permanentemente do banco de dados (DELETE real).
                     System.out.println("\n========== EXCLUIR CONTA ==========");
                     System.out.print("Tem certeza que deseja excluir sua conta permanentemente? (S/N): ");

@@ -31,7 +31,7 @@ public class UsuarioDAO {
      * @throws SQLException caso ocorra algum erro na comunicação com o banco
      */
     public void inserir(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO USUARIO (ID, NOME, EMAIL, CPF, SENHA, TELEFONE, ATIVO) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (ID, NOME, EMAIL, CPF, SENHA, TELEFONE) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = ConexaoBanco.getConexao();
              PreparedStatement comando = conexao.prepareStatement(sql)) {
@@ -42,7 +42,6 @@ public class UsuarioDAO {
             comando.setString(4, usuario.getCpf());
             comando.setString(5, usuario.getSenhaHash());
             comando.setString(6, usuario.getTelefone());
-            comando.setInt(7, usuario.isAtivo() ? 1 : 0);
 
             comando.executeUpdate();
         }

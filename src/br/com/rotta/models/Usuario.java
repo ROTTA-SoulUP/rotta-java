@@ -22,7 +22,6 @@ public class Usuario {
     private String senhaHash;
     private String telefone;
     private LocalDateTime dataCadastro;
-    private boolean ativo;
 
     // CONSTRUTOR
     /**
@@ -45,7 +44,6 @@ public class Usuario {
         this.senhaHash = senha;
         this.telefone = telefone;
         this.dataCadastro = LocalDateTime.now();
-        this.ativo = true;
     }
 
     // MÉTODOS
@@ -64,7 +62,7 @@ public class Usuario {
      * @return true se o login for válido; caso contrário, false
      */
     public boolean login(String cpf, String senha) {
-        if (ativo && this.cpf.equals(cpf) && senhaHash.equals(senha)) {
+        if (this.cpf.equals(cpf) && senhaHash.equals(senha)) {
             System.out.println("Login realizado com sucesso. Bem-vindo, " + nome + "!");
             return true;
         }
@@ -82,15 +80,6 @@ public class Usuario {
         email = novoEmail;
         senhaHash = novaSenha;
         System.out.println("Dados atualizados com sucesso.");
-    }
-
-    /**
-     * Desativa a conta do usuário.
-     */
-    public void desativarConta() {
-        ativo = false;
-
-        System.out.println("Conta desativada com sucesso.");
     }
 
     // GETTERS
@@ -124,10 +113,6 @@ public class Usuario {
 
     public LocalDateTime getDataCadastro() {
         return dataCadastro;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
     }
 
     public String getSenha() {

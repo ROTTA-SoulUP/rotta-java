@@ -49,7 +49,8 @@ public class Resgate extends Movimentacao {
      * Gera um QR Code para o resgate, válido até o fim do dia.
      */
     public void gerarQRCode() {
-        this.codigoQR = "ROTTA-QR-" + System.currentTimeMillis();
+        this.codigoQR = "ROTTA-QR-" + System.currentTimeMillis(); // Esse currentTimeMillies cria um identificador único para o QR Code usando o timestamp atual em milissegundos
+
         this.dataExpiracao = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
 
         System.out.println("QR Code gerado: " + codigoQR);
