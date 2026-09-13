@@ -230,8 +230,7 @@ public class Main {
             System.out.println("3 - Ver Carteira");
             System.out.println("4 - Resgatar Passagem");
             System.out.println("5 - Atualizar Dados");
-            System.out.println("6 - Desativar Conta");
-            System.out.println("7 - Excluir Conta");
+            System.out.println("6 - Excluir Conta");
             System.out.println("0 - Logout");
             System.out.print("Escolha uma opção: ");
 
