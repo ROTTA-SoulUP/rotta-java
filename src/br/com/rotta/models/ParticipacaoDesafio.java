@@ -4,7 +4,7 @@ import br.com.rotta.enums.StatusParticipacao;
 import java.time.LocalDateTime;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa a participação de um usuário em um desafio e controla seu início, conclusão ou cancelamento.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -24,7 +24,13 @@ public class ParticipacaoDesafio {
     private Desafio desafio;
 
     // CONSTRUTOR
-    // Cria a participação já com status "em andamento".
+    /**
+     * Cria uma participação vinculando um usuário a um desafio.
+     *
+     * @param id identificador da participação
+     * @param usuario usuário participante
+     * @param desafio desafio escolhido
+     */
     public ParticipacaoDesafio(int id, Usuario usuario, Desafio desafio) {
         this.id = id;
         this.usuario = usuario;
@@ -33,21 +39,27 @@ public class ParticipacaoDesafio {
     }
 
     // MÉTODOS
-    // Marca o início da participação, registrando a data e hora.
+    /**
+     * Registra o início da participação no desafio.
+     */
     public void iniciar() {
         dataInicio = LocalDateTime.now();
         status = StatusParticipacao.EM_ANDAMENTO;
         System.out.println("Desafio iniciado: " + desafio.getNome());
     }
 
-    // Marca a participação como concluída, registrando a data de conclusão.
+    /**
+     * Registra a conclusão da participação no desafio.
+     */
     public void concluir() {
         dataConclusao = LocalDateTime.now();
         status = StatusParticipacao.CONCLUIDA;
         System.out.println("Participação concluída com sucesso.");
     }
 
-    // Marca a participação como cancelada.
+    /**
+     * Cancela a participação no desafio.
+     */
     public void cancelar() {
         status = StatusParticipacao.CANCELADA;
         System.out.println("Participação cancelada.");

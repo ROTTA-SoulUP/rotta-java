@@ -3,7 +3,7 @@ package br.com.rotta.models;
 import br.com.rotta.enums.FormatoMidia;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa um desafio sustentável disponível no Rotta, incluindo formato exigido, tempo máximo e pontuação.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -22,6 +22,15 @@ public class Desafio {
     private int pontosDesafio;
 
     // CONSTRUTOR
+    /**
+     * Cria um desafio com seu formato, limite de vídeo e pontuação.
+     *
+     * @param id identificador do desafio
+     * @param nome nome do desafio
+     * @param tipoFormato formato de mídia exigido
+     * @param tempoMaxVideo tempo máximo permitido para vídeo, em segundos
+     * @param pontosDesafio quantidade de pontos do desafio
+     */
     public Desafio(int id, String nome, FormatoMidia tipoFormato, int tempoMaxVideo, int pontosDesafio) {
         this.id = id;
         this.nome = nome;
@@ -31,7 +40,9 @@ public class Desafio {
     }
 
     // MÉTODOS
-    // Exibe os dados do desafio, mostrando o tempo máximo apenas quando o formato exigido é vídeo.
+    /**
+     * Exibe as informações do desafio e, quando necessário, o tempo máximo do vídeo.
+     */
     public void exibirDesafio() {
         System.out.println("Desafio: " + nome);
         System.out.println("Formato: " + tipoFormato);
@@ -43,7 +54,7 @@ public class Desafio {
         System.out.println("Pontos: " + pontosDesafio);
     }
 
-    // GETTER
+    // GETTERS
     public int getId() {
         return id;
     }

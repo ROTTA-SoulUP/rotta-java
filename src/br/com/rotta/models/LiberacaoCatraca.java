@@ -5,7 +5,7 @@ import br.com.rotta.enums.MetodoLiberacao;
 import br.com.rotta.enums.StatusLiberacao;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe responsável por simular a liberação da catraca por NFC ou QR Code após um resgate.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -23,12 +23,22 @@ public class LiberacaoCatraca {
     private StatusLiberacao status;
 
     // CONSTRUTOR
+    /**
+     * Cria uma liberação de catraca com o identificador informado.
+     *
+     * @param id identificador da liberação
+     */
     public LiberacaoCatraca(int id) {
         this.id = id;
     }
 
     // MÉTODOS
-    // Tenta liberar a catraca usando o cartão NFC, validando se ele está ativo.
+    /**
+     * Simula a liberação da catraca utilizando um cartão NFC ativo.
+     *
+     * @param cartao cartão Rotta utilizado na liberação
+     * @return true se a catraca for liberada; caso contrário, false
+     */
     public boolean liberarViaNFC(RottaCard cartao) {
         this.tipoMetodo = MetodoLiberacao.NFC;
         this.dataLiberacao = LocalDateTime.now();
@@ -44,7 +54,12 @@ public class LiberacaoCatraca {
         return false;
     }
 
-    // Tenta liberar a catraca usando o QR Code do resgate, validando sua autenticidade.
+    /**
+     * Simula a liberação da catraca utilizando o QR Code de um resgate válido.
+     *
+     * @param resgate resgate cujo QR Code será validado
+     * @return true se a catraca for liberada; caso contrário, false
+     */
     public boolean liberarViaQRCode(Resgate resgate) {
         this.tipoMetodo = MetodoLiberacao.QRCODE;
         this.dataLiberacao = LocalDateTime.now();

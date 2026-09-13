@@ -5,7 +5,7 @@ import br.com.rotta.enums.StatusMidia;
 import java.time.LocalDateTime;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe abstrata que representa uma mídia enviada pelo usuário e reúne os dados comuns a fotos e vídeos.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -27,7 +27,14 @@ public abstract class Midia {
     private ParticipacaoDesafio participacao;
 
     // CONSTRUTOR
-    // Cria a mídia já com status pendente, antes do envio.
+    /**
+     * Cria uma mídia vinculada ao usuário e à participação em um desafio.
+     *
+     * @param id identificador da mídia
+     * @param nomeArquivo nome do arquivo da mídia
+     * @param usuario usuário que enviou a mídia
+     * @param participacao participação no desafio relacionada à mídia
+     */
     public Midia(int id, String nomeArquivo, Usuario usuario,
                  ParticipacaoDesafio participacao) {
         this.id = id;
@@ -38,7 +45,9 @@ public abstract class Midia {
     }
 
     // MÉTODOS
-    // Registra o momento do envio e atualiza o status da mídia.
+    /**
+     * Registra a data de envio e altera o status da mídia para enviada.
+     */
     public void enviar() {
         dataEnvio = LocalDateTime.now();
         status = StatusMidia.ENVIADO;

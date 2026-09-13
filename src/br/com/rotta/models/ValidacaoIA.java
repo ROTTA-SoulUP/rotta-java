@@ -4,7 +4,7 @@ import br.com.rotta.enums.FormatoMidia;
 import br.com.rotta.enums.ResultadoValidacao;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe responsável por simular a validação da mídia enviada pelo usuário de acordo com o desafio escolhido.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -22,6 +22,14 @@ public class ValidacaoIA {
     private String observacao;
 
     // CONSTRUTOR
+    /**
+     * Cria uma validação com pontuação, resultado e observação.
+     *
+     * @param id identificador da validação
+     * @param scoreIA pontuação da validação
+     * @param resultado resultado da validação
+     * @param observacao observação da análise
+     */
     public ValidacaoIA(int id, double scoreIA, ResultadoValidacao resultado, String observacao) {
         this.id = id;
         this.scoreIA = scoreIA;
@@ -31,8 +39,10 @@ public class ValidacaoIA {
 
     // MÉTODOS
     /**
-     * Simula a análise da mídia pela IA, comparando o formato enviado
-     * com o formato exigido pelo desafio (foto ou vídeo).
+     * Simula a análise da mídia comparando o formato enviado com o formato exigido pelo desafio.
+     *
+     * @param midia mídia que será analisada
+     * @param desafio desafio utilizado como referência para a validação
      */
     public void analisarMidia(Midia midia, Desafio desafio) {
         if (midia == null || desafio == null) {
@@ -61,13 +71,19 @@ public class ValidacaoIA {
         observacao = "Mídia aprovada pela IA.";
     }
 
-    // Exibe a pontuação e o resultado da análise feita pela IA.
+    /**
+     * Exibe a pontuação e o resultado da validação.
+     */
     public void exibirResultado() {
         System.out.println("Pontuação da IA: " + scoreIA + " / 1.00");
         System.out.println("Resultado: " + resultado);
     }
 
-    // Retorna verdadeiro caso a mídia tenha sido aprovada pela IA.
+    /**
+     * Verifica se o resultado da validação foi aprovado.
+     *
+     * @return true se a validação foi aprovada; caso contrário, false
+     */
     public boolean foiAprovado() {
         return resultado == ResultadoValidacao.APROVADO;
     }

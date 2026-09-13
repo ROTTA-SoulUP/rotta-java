@@ -1,7 +1,7 @@
 package br.com.rotta.models;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa a pontuação atribuída ao usuário após a validação de uma ação.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -17,14 +17,23 @@ public class Pontuacao {
     private double pontosAtribuidos;
 
     // CONSTRUTOR
-    // Cria uma pontuação.
+    /**
+     * Cria uma pontuação com a quantidade de pontos atribuídos.
+     *
+     * @param id identificador da pontuação
+     * @param pontosAtribuidos quantidade de pontos atribuídos
+     */
     public Pontuacao(int id, double pontosAtribuidos) {
         this.id = id;
         this.pontosAtribuidos = pontosAtribuidos;
     }
 
     // MÉTODOS
-    // Retorna a quantidade de pontos atribuídos ao usuário.
+    /**
+     * Retorna a quantidade de pontos atribuídos.
+     *
+     * @return quantidade de pontos
+     */
     public double calcularPontos() {
         return pontosAtribuidos;
     }

@@ -1,7 +1,7 @@
 package br.com.rotta.models;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa o cartão Rotta com identificação NFC vinculado à carteira do usuário.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -19,6 +19,13 @@ public class RottaCard {
     private Carteira carteira;
 
     // CONSTRUTOR
+    /**
+     * Cria um cartão Rotta com identificação NFC e status informado.
+     *
+     * @param id identificador do cartão
+     * @param codigoNfc código de identificação NFC
+     * @param ativo indica se o cartão está ativo
+     */
     public RottaCard(int id, String codigoNfc, boolean ativo) {
         this.id = id;
         this.codigoNfc = codigoNfc;
@@ -26,13 +33,21 @@ public class RottaCard {
     }
 
     // MÉTODOS
-    // Associa o cartão físico (NFC) à carteira digital do usuário.
+    /**
+     * Vincula o cartão à carteira digital do usuário.
+     *
+     * @param carteira carteira que será vinculada ao cartão
+     */
     public void vincularCartao(Carteira carteira) {
         this.carteira = carteira;
         System.out.println("Cartão NFC vinculado à carteira " + carteira.getId() + ".");
     }
 
-    // Retorna o código NFC do cartão, usado para leitura na catraca.
+    /**
+     * Retorna o código NFC utilizado para identificar o cartão.
+     *
+     * @return código NFC do cartão
+     */
     public String identificar() {
         return codigoNfc;
     }

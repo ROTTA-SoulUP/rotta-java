@@ -12,7 +12,7 @@ import br.com.rotta.dao.UsuarioDAO;
 import java.sql.SQLException;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe principal do projeto, responsável por executar o sistema, apresentar os menus e testar o fluxo das funcionalidades.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -48,7 +48,11 @@ public class Main {
     };
 
     // MÉTODO PRINCIPAL
-    // Exibe o menu inicial (cadastro, login ou sair) até o usuário escolher sair.
+    /**
+     * Inicia a execução do sistema Rotta e apresenta o menu inicial.
+     *
+     * @param args argumentos recebidos na execução do programa
+     */
     public static void main(String[] args) {
         int opcao;
 
@@ -82,8 +86,7 @@ public class Main {
 
     // MÉTODOS
     /**
-     * Coleta e valida os dados do novo usuário (email, CPF, senha e telefone),
-     * verifica duplicidade no banco e insere o novo cadastro.
+     * Coleta, valida e cadastra um novo usuário no banco de dados.
      */
     private static void cadastrarUsuario() {
         System.out.println("\n========== CADASTRO ==========");
@@ -164,8 +167,7 @@ public class Main {
     }
 
     /**
-     * Autentica o usuário pelo CPF e senha, busca os dados no banco e,
-     * se o login for válido, inicializa a carteira, a streak, o cartão e o Capi.
+     * Realiza o login pelo CPF e senha e inicializa os dados necessários para o menu logado.
      */
     private static void fazerLogin() {
         System.out.println("\n========== LOGIN ==========");
@@ -214,8 +216,7 @@ public class Main {
     }
 
     /**
-     * Menu principal exibido após o login, com acesso ao Capi/Streak, desafios,
-     * carteira, resgate de passagem e gerenciamento da conta.
+     * Exibe o menu principal do usuário após o login.
      */
     private static void menuLogado() {
         int opcao;
@@ -547,8 +548,10 @@ public class Main {
     }
 
     /**
-     * Executa a validação da mídia pela IA e, se aprovada, atualiza a streak,
-     * conclui a participação no desafio e credita os pontos na carteira.
+     * Valida a mídia enviada, atualiza a participação e credita os pontos quando a validação é aprovada.
+     *
+     * @param midia mídia que será validada
+     * @return true quando a mídia é aprovada; caso contrário, false
      */
     private static boolean validarMidia(Midia midia) {
         System.out.println("\n========== VALIDAÇÃO IA ==========");
@@ -574,7 +577,11 @@ public class Main {
         return false;
     }
 
-    // Lê a opção digitada e trata entrada inválida, retornando -1 em caso de erro.
+    /**
+     * Lê uma opção numérica informada pelo usuário.
+     *
+     * @return número informado ou -1 quando a entrada não é válida
+     */
     private static int lerOpcao() {
         try {
             return Integer.parseInt(scanner.nextLine());

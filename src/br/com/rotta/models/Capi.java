@@ -1,7 +1,7 @@
 package br.com.rotta.models;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa a capivara mascote do Rotta, seu nível e as dicas apresentadas ao usuário.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -19,7 +19,14 @@ public class Capi {
     private String descricao;
 
     // CONSTRUTOR
-    // Cria a Capi com o seu nome, nível e descrição visual.
+    /**
+     * Cria a Capi com identificação, nome, nível e descrição.
+     *
+     * @param id identificador da Capi
+     * @param nome nome da Capi
+     * @param nivel nível inicial da Capi
+     * @param descricao descrição da Capi
+     */
     public Capi(int id, String nome, String nivel, String descricao) {
         this.id = id;
         this.nome = nome;
@@ -28,17 +35,30 @@ public class Capi {
     }
 
     // MÉTODOS
-    // Exibe as informações atuais do Capi.
+    /**
+     * Exibe na tela as informações da Capi.
+     */
     public void exibirNaTela() {
         System.out.println("Mascote: " + nome);
         System.out.println("Aparência: " + descricao);
     }
-    // Retorna uma dica simples relacionada à funcionalidade utilizada.
+
+    /**
+     * Retorna uma dica relacionada à funcionalidade utilizada pelo usuário.
+     *
+     * @param funcionalidade funcionalidade que está sendo utilizada
+     * @return dica da Capi
+     */
     public String sugerirDica(String funcionalidade) {
         return "Dica da Capi: escolha um desafio que combine com sua rotina de hoje!";
     }
 
-    // Define o nível do Capi de acordo com os dias consecutivos do usuário.
+    /**
+     * Define e retorna o nível da Capi de acordo com os dias consecutivos do usuário.
+     *
+     * @param diasConsecutivos quantidade de dias consecutivos do usuário
+     * @return nível atual da Capi
+     */
     public String verificarNivel(int diasConsecutivos) {
 
         if (diasConsecutivos >= 30) {
@@ -55,6 +75,7 @@ public class Capi {
     }
 
     // GETTERS
+
     public int getId() {
         return id;
     }

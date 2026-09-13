@@ -3,7 +3,7 @@ package br.com.rotta.models;
 import java.time.LocalDateTime;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa a carteira de pontos do usuário e controla créditos, débitos e consultas de saldo.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -21,7 +21,14 @@ public class Carteira {
     private String tipoUso;
 
     // CONSTRUTOR
-    // Cria a carteira com o seu saldo inicial e define quando ela foi atualizada.
+    /**
+     * Cria uma carteira com saldo, data de atualização e tipo de uso informados.
+     *
+     * @param id identificador da carteira
+     * @param saldoPontos saldo inicial de pontos
+     * @param ultimaAtualizacao data e hora da última atualização
+     * @param tipoUso finalidade de uso da carteira
+     */
     public Carteira(int id, double saldoPontos,
                     LocalDateTime ultimaAtualizacao, String tipoUso) {
 
@@ -37,7 +44,11 @@ public class Carteira {
     }
 
     // MÉTODOS
-    // Adiciona pontos ao saldo da carteira.
+    /**
+     * Adiciona pontos ao saldo da carteira e atualiza a data da última alteração.
+     *
+     * @param pontos quantidade de pontos que será adicionada
+     */
     public void creditarPontos(double pontos) {
         saldoPontos += pontos;
         ultimaAtualizacao = LocalDateTime.now();
@@ -46,7 +57,11 @@ public class Carteira {
                 + " pontos! Saldo atual: " + saldoPontos);
     }
 
-    // Retira pontos da carteira somente se houver saldo suficiente.
+    /**
+     * Retira pontos da carteira quando existe saldo suficiente.
+     *
+     * @param pontos quantidade de pontos que será retirada
+     */
     public void debitarPontos(double pontos) {
         if (verificarSaldo(pontos)) {
             saldoPontos -= pontos;
@@ -59,12 +74,21 @@ public class Carteira {
         }
     }
 
-    // Consulta o saldo atual da carteira.
+    /**
+     * Consulta o saldo atual da carteira.
+     *
+     * @return saldo atual de pontos
+     */
     public double consultarSaldo() {
         return saldoPontos;
     }
 
-    // Verifica se a carteira possui pontos suficientes para uma operação.
+    /**
+     * Verifica se a carteira possui pontos suficientes para uma operação.
+     *
+     * @param pontos quantidade de pontos necessária
+     * @return true se houver saldo suficiente; caso contrário, false
+     */
     public boolean verificarSaldo(double pontos) {
         return saldoPontos >= pontos;
     }

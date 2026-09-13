@@ -1,7 +1,7 @@
 package br.com.rotta.models;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa uma foto enviada como comprovação de uma ação sustentável.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -16,6 +16,15 @@ public class PostagemFoto extends Midia {
     private String localizacao;
 
     // CONSTRUTOR
+    /**
+     * Cria uma postagem de foto vinculada ao usuário e ao desafio.
+     *
+     * @param id identificador da mídia
+     * @param nomeArquivo nome do arquivo da foto
+     * @param usuario usuário que enviou a foto
+     * @param participacao participação no desafio relacionada à foto
+     * @param localizacao localização informada para a foto
+     */
     public PostagemFoto(int id, String nomeArquivo, Usuario usuario,
                         ParticipacaoDesafio participacao, String localizacao) {
         super(id, nomeArquivo, usuario, participacao);
@@ -23,20 +32,28 @@ public class PostagemFoto extends Midia {
     }
 
     // MÉTODOS
-    // Reaproveita o envio da classe mãe e complementa com uma mensagem específica de foto.
+    /**
+     * Envia a foto para validação, reaproveitando o comportamento da classe Midia.
+     */
     @Override
     public void enviar() {
         super.enviar();
         System.out.println("Foto enviada para validação.");
     }
 
-    // Simula a validação do arquivo de foto.
+    /**
+     * Simula a validação do arquivo de foto.
+     *
+     * @return true quando a foto é considerada válida
+     */
     public boolean validarFoto() {
         System.out.println("Foto validada.");
         return true;
     }
 
-    // Simula a compressão da imagem antes do envio.
+    /**
+     * Simula a compressão da imagem antes do envio.
+     */
     public void comprimirImagem() {
         System.out.println("Imagem comprimida para o envio.");
     }

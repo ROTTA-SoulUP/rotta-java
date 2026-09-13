@@ -5,7 +5,7 @@ import br.com.rotta.enums.StatusMovimentacao;
 import java.time.LocalDateTime;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe abstrata que representa uma movimentação de pontos e define a estrutura básica para sua execução.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -23,7 +23,12 @@ public abstract class Movimentacao {
     private StatusMovimentacao status;
 
     // CONSTRUTOR
-    // Cria uma movimentação com status pendente.
+    /**
+     * Cria uma movimentação com valor, data atual e status pendente.
+     *
+     * @param id identificador da movimentação
+     * @param valor valor da movimentação
+     */
     public Movimentacao(int id, double valor) {
         this.id = id;
         this.valor = valor;
@@ -32,7 +37,9 @@ public abstract class Movimentacao {
     }
 
     // MÉTODOS
-    // Cada tipo de movimentação define sua própria execução.
+    /**
+     * Executa a movimentação de acordo com a sua implementação na classe filha.
+     */
     public abstract void executar();
 
     // GETTERS E SETTER

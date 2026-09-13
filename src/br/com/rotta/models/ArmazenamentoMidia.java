@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe responsável por simular o armazenamento temporário de fotos e vídeos no dispositivo antes do envio.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -20,7 +20,12 @@ public class ArmazenamentoMidia {
     private List<Midia> midiasArmazenadas = new ArrayList<>();
 
     // MÉTODOS
-    // Salva a mídia na lista, evitando duplicidade, e retorna o nome do arquivo salvo.
+    /**
+     * Salva uma mídia no armazenamento temporário e evita adicionar a mesma referência mais de uma vez.
+     *
+     * @param midia mídia que será armazenada
+     * @return nome do arquivo da mídia armazenada
+     */
     public String salvar(Midia midia) {
         if (!midiasArmazenadas.contains(midia)) {
             midiasArmazenadas.add(midia);
@@ -30,7 +35,12 @@ public class ArmazenamentoMidia {
         return midia.getNomeArquivo();
     }
 
-    // Procura e retorna uma mídia armazenada pelo nome do arquivo.
+    /**
+     * Procura uma mídia armazenada pelo nome do arquivo.
+     *
+     * @param nomeArquivo nome do arquivo que será procurado
+     * @return mídia encontrada ou null caso não exista
+     */
     public Midia recuperar(String nomeArquivo) {
         for (Midia midia : midiasArmazenadas) {
             if (midia.getNomeArquivo().equalsIgnoreCase(nomeArquivo)) {
@@ -42,7 +52,9 @@ public class ArmazenamentoMidia {
         return null;
     }
 
-    // Lista todas as mídias atualmente armazenadas.
+    /**
+     * Exibe as mídias que estão atualmente armazenadas.
+     */
     public void listarMidias() {
         if (midiasArmazenadas.isEmpty()) {
             System.out.println("Nenhuma mídia salva no armazenamento.");
@@ -56,7 +68,11 @@ public class ArmazenamentoMidia {
         }
     }
 
-    // Remove uma mídia específica do armazenamento.
+    /**
+     * Remove uma mídia específica do armazenamento temporário.
+     *
+     * @param midia mídia que será removida
+     */
     public void remover(Midia midia) {
         if (midiasArmazenadas.remove(midia)) {
             System.out.println("Mídia removida do armazenamento.");

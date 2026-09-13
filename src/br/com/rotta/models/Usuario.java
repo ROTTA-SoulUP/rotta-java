@@ -3,7 +3,7 @@ package br.com.rotta.models;
 import java.time.LocalDateTime;
 
 /**
- * Grupo de Desenvolvimento do Projeto.
+ * Classe que representa o usuário do Rotta, seus dados de cadastro, acesso e status da conta.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -25,7 +25,16 @@ public class Usuario {
     private boolean ativo;
 
     // CONSTRUTOR
-    // Cria um usuário e registra automaticamente a data de cadastro.
+    /**
+     * Cria um usuário e registra automaticamente a data de cadastro.
+     *
+     * @param id identificador do usuário
+     * @param nome nome do usuário
+     * @param email email do usuário
+     * @param cpf CPF do usuário
+     * @param senha senha do usuário
+     * @param telefone telefone do usuário
+     */
     public Usuario(int id, String nome, String email, String cpf,
                    String senha, String telefone) {
 
@@ -40,14 +49,19 @@ public class Usuario {
     }
 
     // MÉTODOS
-    // Simula o cadastro do usuário.
+    /**
+     * Simula a confirmação do cadastro do usuário.
+     */
     public void cadastrar() {
         System.out.println("Usuário " + nome + " cadastrado com sucesso.");
     }
 
     /**
-     * Verifica se a senha informada corresponde à senha cadastrada,
-     * e se a conta está ativa antes de permitir o login.
+     * Verifica CPF, senha e status ativo antes de permitir o login.
+     *
+     * @param cpf CPF informado no login
+     * @param senha senha informada no login
+     * @return true se o login for válido; caso contrário, false
      */
     public boolean login(String cpf, String senha) {
         if (ativo && this.cpf.equals(cpf) && senhaHash.equals(senha)) {
@@ -58,14 +72,21 @@ public class Usuario {
         return false;
     }
 
-    // Atualiza os dados de contato do usuário.
+    /**
+     * Atualiza o email e a senha do usuário.
+     *
+     * @param novoEmail novo email do usuário
+     * @param novaSenha nova senha do usuário
+     */
     public void atualizarDados(String novoEmail, String novaSenha) {
         email = novoEmail;
         senhaHash = novaSenha;
         System.out.println("Dados atualizados com sucesso.");
     }
 
-    // Desativa a conta do usuário.
+    /**
+     * Desativa a conta do usuário.
+     */
     public void desativarConta() {
         ativo = false;
 
