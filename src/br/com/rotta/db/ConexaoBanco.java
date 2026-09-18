@@ -18,7 +18,7 @@ public class ConexaoBanco {
     // ATRIBUTOS
     private static final String URL = "jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL";
     private static final String USUARIO = "RM571713";
-    private static final String SENHA = "<SENHA>";
+    private static final String SENHA = "250807";
 
     // MÉTODOS
     /**
