@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 /**
  * Classe responsável por estabelecer a conexão entre o sistema Rotta e o banco de dados Oracle.
  *
@@ -18,7 +19,8 @@ public class ConexaoBanco {
     // ATRIBUTOS
     private static final String URL = "jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL";
     private static final String USUARIO = "RM571713";
-    private static final String SENHA = "250807";
+    private static final String SENHA = "fiap26";
+
 
     // MÉTODOS
     /**

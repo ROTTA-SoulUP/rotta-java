@@ -91,28 +91,37 @@ public class Main {
     private static void cadastrarUsuario() {
         System.out.println("\n========== CADASTRO ==========");
 
-        System.out.print("Nome: ");
-        String nome = scanner.nextLine();
+        String nome;
+        do {
+            System.out.print("Nome completo: ");
+            nome = scanner.nextLine().trim();
+
+            if (nome.isBlank()) {
+                System.out.println("O nome não pode ficar vazio.");
+            } else if (nome.length() < 3) {
+                System.out.println("Digite um nome com pelo menos 3 caracteres.");
+            }
+        } while (nome.isBlank() || nome.length() < 3);
 
         String email;
         do {
             System.out.print("Email: ");
-            email = scanner.nextLine();
+            email = scanner.nextLine().trim();
 
-            if (!email.contains("@")) {
+            if (!email.matches("^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$")) {
                 System.out.println("Email inválido. Digite novamente.");
             }
-        } while (!email.contains("@"));
+        } while (!email.matches("^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$"));
 
         String cpf;
         do {
-            System.out.print("CPF: ");
-            cpf = scanner.nextLine();
+            System.out.print("CPF (somente números): ");
+            cpf = scanner.nextLine().trim();
 
-            if (cpf.length() != 11) {
-                System.out.println("CPF inválido. Digite novamente.");
+            if (!cpf.matches("\\d{11}")) {
+                System.out.println("CPF inválido. Digite exatamente 11 números.");
             }
-        } while (cpf.length() != 11);
+        } while (!cpf.matches("\\d{11}"));
 
         String senha;
         do {
@@ -126,13 +135,13 @@ public class Main {
 
         String telefone;
         do {
-            System.out.print("Telefone: ");
-            telefone = scanner.nextLine();
+            System.out.print("Telefone (DDD + número, somente dígitos): ");
+            telefone = scanner.nextLine().trim();
 
-            if (telefone.length() != 11) {
-                System.out.println("Telefone inválido. Digite novamente.");
+            if (!telefone.matches("\\d{11}")) {
+                System.out.println("Telefone inválido. Digite 11 números, incluindo o DDD.");
             }
-        } while (telefone.length() != 11);
+        } while (!telefone.matches("\\d{11}"));
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
@@ -189,7 +198,15 @@ public class Main {
         try {
             usuarioEncontrado = usuarioDAO.buscarPorCpf(cpf);
         } catch (SQLException e) {
-            System.out.println("Não foi possível consultar o usuário no banco.");
+            System.out.println("Não foi possível consultar o usuário no banco de dados.");
+
+            if (e.getErrorCode() == 28000) {
+                System.out.println("A conta Oracle está bloqueada. O login não pôde ser concluído.");
+            } else {
+                System.out.println("Código do erro: " + e.getErrorCode());
+                System.out.println("Detalhes: " + e.getMessage());
+            }
+
             return;
         }
 

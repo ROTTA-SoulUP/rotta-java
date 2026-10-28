@@ -3,7 +3,8 @@ package br.com.rotta.models;
 import java.time.LocalDateTime;
 
 /**
- * Classe que representa o usuário do Rotta, seus dados de cadastro, acesso e status da conta.
+ * Classe que representa o usuário do Rotta, seus dados de cadastro,
+ * acesso e status da conta.
  *
  * @author Guilherme Almeida (RM: 571713)
  * @author Leonardo Arnaldo (RM: 573188)
@@ -11,7 +12,6 @@ import java.time.LocalDateTime;
  * @author Geovanna Secchi Egea (RM: 573452)
  * @author Beatriz Urbano M. de Oliveira (RM: 569341)
  */
-
 public class Usuario {
 
     // ATRIBUTOS
@@ -47,25 +47,35 @@ public class Usuario {
     }
 
     // MÉTODOS
+
     /**
-     * Simula a confirmação do cadastro do usuário.
+     * Mantém a compatibilidade com o fluxo de cadastro.
+     * A confirmação será exibida pelo Main.java.
      */
     public void cadastrar() {
-        System.out.println("Usuário " + nome + " cadastrado com sucesso.");
+        // A confirmação do cadastro fica no Main.java.
     }
 
     /**
-     * Verifica CPF, senha e status ativo antes de permitir o login.
+     * Verifica CPF e senha antes de permitir o login.
      *
      * @param cpf CPF informado no login
      * @param senha senha informada no login
      * @return true se o login for válido; caso contrário, false
      */
     public boolean login(String cpf, String senha) {
-        if (this.cpf.equals(cpf) && senhaHash.equals(senha)) {
-            System.out.println("Login realizado com sucesso. Bem-vindo, " + nome + "!");
+        if (this.cpf != null
+                && this.cpf.equals(cpf)
+                && this.senhaHash != null
+                && this.senhaHash.equals(senha)) {
+
+            System.out.println(
+                    "Login realizado com sucesso. Bem-vindo, " + nome + "!"
+            );
+
             return true;
         }
+
         System.out.println("CPF ou senha inválidos.");
         return false;
     }
@@ -77,12 +87,26 @@ public class Usuario {
      * @param novaSenha nova senha do usuário
      */
     public void atualizarDados(String novoEmail, String novaSenha) {
-        email = novoEmail;
-        senhaHash = novaSenha;
+        if (novoEmail == null || novoEmail.isBlank()) {
+            System.out.println("O email não pode ficar vazio.");
+            return;
+        }
+
+        if (novaSenha == null || novaSenha.length() < 6) {
+            System.out.println(
+                    "A senha deve ter pelo menos 6 caracteres."
+            );
+            return;
+        }
+
+        this.email = novoEmail.trim();
+        this.senhaHash = novaSenha;
+
         System.out.println("Dados atualizados com sucesso.");
     }
 
-    // GETTERS
+    // GETTERS E SETTERS
+
     public int getId() {
         return id;
     }
