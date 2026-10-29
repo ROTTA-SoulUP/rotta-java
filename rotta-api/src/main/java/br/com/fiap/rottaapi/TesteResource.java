@@ -27,16 +27,4 @@
             return "Conexão com Oracle funcionando!";
         }
 
-        @GetMapping("/diagnostico-config")
-        public String diagnosticarConfig() {
-            String usuario = System.getenv("DB_USERNAME");
-            String senha = System.getenv("DB_PASSWORD");
-
-            System.out.println("Tamanho da senha recebida: "
-                    + (senha == null ? -1 : senha.length()));
-
-            return "DB_USERNAME definido: " + (usuario != null && !usuario.isBlank())
-                    + " | Usuario esperado: " + "RM571713".equals(usuario)
-                    + " | DB_PASSWORD definida: " + (senha != null && !senha.isBlank());
-        }
     }
