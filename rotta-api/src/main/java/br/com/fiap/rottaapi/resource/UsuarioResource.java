@@ -73,6 +73,44 @@ public class UsuarioResource {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/recuperar-senha/verificar-email")
+    public ResponseEntity<Void> verificarEmailRecuperacao(
+            @RequestBody EmailRequest dados
+    ) {
+        if (dados == null || dados.email() == null
+                || dados.email().isBlank()) {
+            throw new IllegalArgumentException(
+                    "E-mail é obrigatório."
+            );
+        }
+
+        if (usuarioBO.verificarEmailRecuperacao(dados.email())) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/recuperar-senha")
+    public ResponseEntity<Void> redefinirSenha(
+            @RequestBody RedefinirSenhaRequest dados
+    ) {
+        if (dados == null) {
+            throw new IllegalArgumentException(
+                    "E-mail e nova senha são obrigatórios."
+            );
+        }
+
+        if (usuarioBO.redefinirSenha(
+                dados.email(),
+                dados.novaSenha()
+        )) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(
             @PathVariable int id
@@ -105,4 +143,11 @@ public class UsuarioResource {
     public record LoginRequest(String email, String senha) {}
 
     public record SenhaRequest(String senha) {}
+
+    public record EmailRequest(String email) {}
+
+    public record RedefinirSenhaRequest(
+            String email,
+            String novaSenha
+    ) {}
 }

@@ -93,6 +93,41 @@ public class UsuarioBO {
         return usuarioDAO.atualizarSenha(id, senhaHash) > 0;
     }
 
+    public boolean verificarEmailRecuperacao(String email) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException(
+                    "E-mail é obrigatório."
+            );
+        }
+
+        return usuarioDAO.buscarPorEmail(email.trim()).isPresent();
+    }
+
+    public boolean redefinirSenha(String email, String novaSenha) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException(
+                    "E-mail é obrigatório."
+            );
+        }
+
+        if (novaSenha == null || novaSenha.isBlank()) {
+            throw new IllegalArgumentException(
+                    "A nova senha é obrigatória."
+            );
+        }
+
+        Optional<Usuario> usuarioEncontrado =
+                usuarioDAO.buscarPorEmail(email.trim());
+
+        if (usuarioEncontrado.isEmpty()) {
+            return false;
+        }
+
+        int idUsuario = usuarioEncontrado.get().getId();
+
+        return atualizarSenha(idUsuario, novaSenha);
+    }
+
     public boolean excluir(int id) {
         if (id <= 0) {
             throw new IllegalArgumentException(

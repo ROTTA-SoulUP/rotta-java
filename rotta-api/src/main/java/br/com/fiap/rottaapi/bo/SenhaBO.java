@@ -18,13 +18,10 @@ public class SenhaBO {
             return false;
         }
 
-        if (hash.startsWith("$2a$")
-                || hash.startsWith("$2b$")
-                || hash.startsWith("$2y$")) {
+        try {
             return encoder.matches(senha, hash);
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-
-        // Compatibilidade temporária com senhas antigas em texto puro.
-        return senha.equals(hash);
     }
 }
